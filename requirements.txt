@@ -1,0 +1,14 @@
+# Minimal safe deps for development. If local install fails on Windows/Mac, use Docker.
+fastapi
+uvicorn[standard]
+sentence-transformers
+transformers
+torch    # may require platform-specific wheel; use Docker if install fails
+faiss-cpu  # may fail on some OS; prefer Docker for team members on Windows
+scikit-learn
+pydantic
+python-magic
+requests
+google-generativeai
+
+# Add other project-specific deps here only after team review.

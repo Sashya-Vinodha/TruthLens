@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sentence-transformers
+transformers
+torch
+numpy
+google-generativeai
+pydantic
+faiss-cpu   # optional; if this fails, see FAISS note below

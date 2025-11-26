@@ -1,0 +1,21 @@
+# CODEOWNERS - restrict which files each team member can edit
+
+# Backend (only you can edit core backend logic)
+truthlens/backend/app/ @backend-owner
+
+# Dataset (only dataset teammate can edit)
+truthlens/backend/data/docs.json @dataset-owner
+
+# Frontend UI (only UI teammate can edit)
+truthlens/frontend/public/ @ui-owner
+
+# Protect embeddings/models (no one edits directly)
+truthlens/backend/data/*.index
+truthlens/backend/data/*.pkl
+truthlens/backend/data/*.bin
+
+# Config/infra (all can review)
+*.yml
+*.yaml
+Dockerfile
+requirements.txt

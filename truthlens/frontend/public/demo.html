@@ -1,0 +1,64 @@
+<!-- Alternative demo page for TruthLens query interface -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>TruthLens — Alternative Demo</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; background: #fafafa; }
+    main { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    h1 { margin-top: 0; }
+    label { display: block; margin-top: 20px; font-weight: 600; margin-bottom: 8px; }
+    input, textarea, button { font-size: 14px; padding: 10px; width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+    button { background: #0066cc; color: white; cursor: pointer; border: none; margin-top: 20px; font-weight: 600; }
+    button:hover { background: #0052a3; }
+    #status { margin-top: 10px; font-size: 13px; }
+    #out { background: #f5f5f5; padding: 15px; border-radius: 4px; min-height: 100px; font-size: 12px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>TruthLens — Demo UI</h1>
+    <label>Question</label>
+    <textarea id="q" rows="2">Who discovered penicillin?</textarea>
+
+    <label>k (number of docs)</label>
+    <input id="k" type="number" value="3" min="1" />
+
+    <button id="ask">Ask</button>
+    <span id="status"></span>
+
+    <h3>Response</h3>
+    <pre id="out">No result yet</pre>
+  </main>
+
+  <script>
+    console.log("demo.html loaded");
+    const out = document.getElementById('out');
+    const status = document.getElementById('status');
+    
+    document.getElementById('ask').onclick = async () => {
+      const q = document.getElementById('q').value;
+      const k = Number(document.getElementById('k').value) || 3;
+      out.textContent = '';
+      status.textContent = 'Loading…';
+      try {
+        const res = await fetch('/query', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({question: q, k})
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+        status.textContent = ' ✓ OK';
+        console.log("Response:", data);
+      } catch (err) {
+        out.textContent = 'Error: ' + err.message + '\n\nIs the backend running at http://localhost:8000?';
+        status.textContent = ' ✗ Failed';
+        console.error("Error:", err);
+      }
+    };
+  </script>
+</body>
+</html>

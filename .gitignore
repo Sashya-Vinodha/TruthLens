@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+ENV/
+build/
+dist/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+
+# VSCode
+.vscode/
+
+# Mac
+.DS_Store
+
+# data / models (do not commit)
+truthlens/backend/data/*.pkl
+truthlens/backend/data/faiss.index
+truthlens/backend/data/*.safetensors
+truthlens/backend/data/*.bin
+
+# local config
+*.local
+.env
+
+# node modules (if frontend uses node)
+node_modules/
+
+# logs
+*.log
