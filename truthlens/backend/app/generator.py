@@ -170,21 +170,27 @@ Answer:"""
     # If nothing returned, raise so caller can fallback to mock
     raise RuntimeError("Unable to extract text from Gemini response.")
 
+# ...existing code...
+
 def _mock_generate(question, retrieved_docs):
     logger.info("Generating mock response...")
 
-    lower = question.lower()
+    # If no documents were retrieved, we can't answer
+    if not retrieved_docs:
+        return "I abstain — evidence insufficient."
 
-    if "penicillin" in lower and retrieved_docs:
-        return "Penicillin was discovered by Alexander Fleming in 1928 [DOC_0]."
+    # Take the best document (the first one)
+    best_doc = retrieved_docs[0]
+    doc_text = best_doc.get("text", "")
+    doc_id = best_doc.get("id", "UNKNOWN")
 
-    if "insulin" in lower:
-        if len(retrieved_docs) > 1:
-            return "Insulin helps regulate blood sugar [DOC_1]."
-        elif retrieved_docs:
-            return "Insulin is a hormone [DOC_0]."
+    # Simple heuristic: Return the first sentence or the whole text
+    # This makes it work for ANY document in your JSON
+    answer = doc_text.split('\n')[0]  # Take the first line/sentence
+    
+    return f"{answer} [{doc_id}]."
 
-    return "I abstain — evidence insufficient."
+# ...existing code...
 
 
 if __name__ == "__main__":

@@ -1,7 +1,162 @@
 [
   {
     "id": "doc_001",
-    "text": "Alexander Fleming discovered penicillin in 1928.",
-    "title": "Penicillin Discovery"
+    "text": "Alexander Fleming discovered penicillin in 1928."
+  },
+  {
+    "id": "doc_002",
+    "text": "Speech recognition converts spoken audio into text.\nIt uses acoustic models and language models to improve accuracy.\nIt enables hands-free control in vehicles."
+  },
+  {
+    "id": "doc_003",
+    "text": "An AI assistant helps users interact with the system naturally.\nIt understands user intent and provides useful responses.\nIt can control navigation, media, and phone connectivity."
+  },
+  {
+    "id": "doc_004",
+    "text": "Bluetooth allows wireless communication between devices.\nIt is commonly used to connect smartphones to car infotainment systems.\nIt supports audio streaming and call management."
+  },
+  {
+    "id": "doc_005",
+    "text": "GPS determines vehicle location using satellites.\nIt is essential for navigation and route planning.\nIt can assist in real-time traffic updates."
+  },
+  {
+    "id": "doc_006",
+    "text": "Touchscreens allow users to interact with the infotainment system.\nThey display icons, menus, and maps.\nGestures improve usability while driving."
+  },
+  {
+    "id": "doc_007",
+    "text": "User profiles store personal preferences.\nThey can include favorite radio stations and seat positions.\nProfiles enable personalization across drivers."
+  },
+  {
+    "id": "doc_008",
+    "text": "Wi-Fi provides high-speed internet access inside the vehicle.\nIt can support app updates and entertainment streaming.\nPublic hotspots are sometimes used during travel."
+  },
+  {
+    "id": "doc_009",
+    "text": "Infotainment systems require updates to fix bugs and improve features.\nUpdates can be installed via Wi-Fi or USB.\nOver-the-air updates reduce visits to service centers."
+  },
+  {
+    "id": "doc_010",
+    "text": "The audio system outputs sound through speakers.\nIt includes amplifiers, equalizers, and volume controls.\nIt can play music from multiple sources."
+  },
+  {
+    "id": "doc_011",
+    "text": "Voice commands allow safe interaction while driving.\nThe system listens for trigger phrases.\nCommands are mapped to specific actions like calling a contact."
+  },
+  {
+    "id": "doc_012",
+    "text": "Mobile apps enhance infotainment system features.\nCommon integrations include messaging and navigation apps.\nData sharing must be secure and authorized by the user."
+  },
+  {
+    "id": "doc_013",
+    "text": "Infotainment systems often control air conditioning.\nUsers adjust temperature and airflow via touch or voice.\nAutomated climate systems improve comfort."
+  },
+  {
+    "id": "doc_014",
+    "text": "Radio broadcasts provide music and news.\nFM offers better sound quality compared to AM.\nRadio presets allow quick access to favorite stations."
+  },
+  {
+    "id": "doc_015",
+    "text": "USB supports charging and media playback.\nIt allows firmware updates through a flash drive.\nIt can also provide wired smartphone integration."
+  },
+  {
+    "id": "doc_016",
+    "text": "Infotainment systems collect user data.\nProper encryption protects sensitive information.\nUsers must be informed about stored data."
+  },
+  {
+    "id": "doc_017",
+    "text": "Navigation systems calculate the best driving route.\nThey use maps and traffic data to optimize travel time.\nUsers can select preferences like avoiding tolls."
+  },
+  {
+    "id": "doc_018",
+    "text": "Maps require frequent updates to remain accurate.\nUpdates may include new roads and points of interest.\nThey are usually downloaded through the internet."
+  },
+  {
+    "id": "doc_019",
+    "text": "Resolution determines visual clarity on screens.\nHigher pixel density improves readability.\nBright displays help visibility in daylight."
+  },
+  {
+    "id": "doc_020",
+    "text": "Modern vehicles include sensors for safety and control.\nExamples include speed, temperature, and parking sensors.\nSensor data can be shown on the display."
+  },
+  {
+    "id": "doc_021",
+    "text": "Buttons on the steering wheel help operate the system.\nThey reduce distractions by allowing hands to stay on the wheel.\nCommon controls include volume and call buttons."
+  },
+  {
+    "id": "doc_022",
+    "text": "Lane assist helps drivers stay within lane boundaries.\nCameras monitor lane markings.\nAlerts or gentle steering corrections maintain safety."
+  },
+  {
+    "id": "doc_023",
+    "text": "Blind spot sensors detect vehicles beside the car.\nWarnings appear on the mirror or screen.\nThis feature reduces lane-change accidents."
+  },
+  {
+    "id": "doc_024",
+    "text": "Cameras help drivers when reversing.\nGuidelines appear on the display.\nThe system increases accuracy and safety when parking."
+  },
+  {
+    "id": "doc_025",
+    "text": "Infotainment systems store configuration and media data.\nStorage can be on internal memory or cloud servers.\nData management ensures smooth operation."
+  },
+  {
+    "id": "doc_026",
+    "text": "Vehicles often include multiple charging ports.\nThey support both wired and wireless charging options.\nFast charging keeps devices powered during travel."
+  },
+  {
+    "id": "doc_027",
+    "text": "Microphones capture user speech clearly.\nNoise suppression improves accuracy of voice commands.\nPlacement helps avoid engine and road noise."
+  },
+  {
+    "id": "doc_028",
+    "text": "Text-to-Speech converts text into natural audio output.\nIt reads navigation instructions and notifications.\nVoice quality improves with better AI models."
+  },
+  {
+    "id": "doc_029",
+    "text": "Bluetooth enables hands-free phone calls.\nCaller information is shown on the display.\nMicrophones and speakers handle communication clearly."
+  },
+  {
+    "id": "doc_030",
+    "text": "Screens in the rear seats provide entertainment for passengers.\nThey can stream movies or connect to gaming devices.\nControls may be integrated with the main system."
+  },
+  {
+    "id": "doc_031",
+    "text": "Battery status is monitored for electric vehicles.\nThe system displays range and charging information.\nEnergy-saving modes extend driving distance."
+  },
+  {
+    "id": "doc_032",
+    "text": "A HUD projects key information onto the windshield.\nIt reduces the need to look away from the road.\nNavigation and speed data are commonly shown."
+  },
+  {
+    "id": "doc_033",
+    "text": "Some systems recognize hand gestures.\nUsers can change volume or accept calls with simple motions.\nGesture control reduces physical interaction."
+  },
+  {
+    "id": "doc_034",
+    "text": "Night mode reduces screen brightness automatically.\nIt prevents glare and helps driver visibility.\nThe color theme becomes darker to improve comfort."
+  },
+  {
+    "id": "doc_035",
+    "text": "Some infotainment systems include a built-in app store.\nUsers can download apps like music and navigation tools.\nApps must be optimized for safe in-car use."
+  },
+  {
+    "id": "doc_036",
+    "text": "An emergency call system alerts authorities after an accident.\nIt sends location and impact information.\nThe system improves response times and safety."
+  },
+  {
+    "id": "doc_037",
+    "text": "The digital cluster replaces traditional gauges.\nIt shows speed, alerts, and vehicle status.\nLayouts can change based on driving mode."
+  },
+  {
+    "id": "doc_038",
+    "text": "Alerts notify the driver of potential threats.\nExamples include door unlock attempts and break-in detection.\nSecurity logs can be reviewed in the system."
+  },
+  {
+    "id": "doc_039",
+    "text": "Data encryption protects information stored in the vehicle.\nIt prevents unauthorized access.\nSecure keys are required to decrypt sensitive data."
+  },
+  {
+    "id": "doc_040",
+    "text": "The system can store a digital version of the car manual.\nUsers can search for features and troubleshooting steps.\nImages and videos improve understanding."
   }
 ]
