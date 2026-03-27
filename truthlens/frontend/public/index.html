@@ -1,69 +1,363 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>TruthLens - Demo UI</title>
-  <style>
-    body { font-family: Inter, system-ui, Arial; margin: 40px; color:#111; }
-    input, button, textarea { font-size: 14px; padding:8px; margin:6px 0; width:100%; box-sizing:border-box; }
-    .card { max-width:900px; margin: 10px auto; }
-    pre { background:#f5f5f7; padding:12px; border-radius:8px; overflow:auto; }
-    .status { margin-top: 10px; font-size: 12px; color: #666; }
-    .error { color: #d00; }
-    .success { color: #060; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>TruthLens — Quick Demo</h1>
-    <p>Enter a question and press <strong>Ask</strong>. This calls <code>/query</code> on the backend.</p>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthLens AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --primary-blue: #4F46E5;
+            --text-dark: #1F2937;
+        }
 
-    <label>Question</label>
-    <input id="q" value="Who discovered penicillin?" />
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    <label>k (top docs)</label>
-    <input id="k" type="number" value="3" min="1" />
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    <button id="ask">Ask</button>
-    <div id="status" class="status"></div>
+        /* --- Main Glass Card --- */
+        .glass-card {
+            width: 100%;
+            max-width: 950px;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-    <h3>Response</h3>
-    <pre id="out">No response yet.</pre>
-  </div>
+        /* --- Header --- */
+        .header {
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-  <script>
-    console.log("index.html loaded");
-    
-    document.getElementById('ask').addEventListener('click', async () => {
-      const q = document.getElementById('q').value;
-      const k = parseInt(document.getElementById('k').value || '3', 10);
-      const statusEl = document.getElementById('status');
-      const outEl = document.getElementById('out');
-      
-      outEl.textContent = 'Loading...';
-      statusEl.textContent = '';
-      
-      try {
-        const r = await fetch('/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: q, k: k })
-        });
-        
-        if (!r.ok) {
-          throw new Error(`HTTP ${r.status}`);
+        /* SVG Avatar Container */
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid white;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
         
-        const j = await r.json();
-        outEl.textContent = JSON.stringify(j, null, 2);
-        statusEl.innerHTML = '<span class="success">✓ Request successful</span>';
-        console.log("Query result:", j);
-      } catch (err) {
-        outEl.textContent = 'Error: ' + err.message + '\n\nMake sure backend is running on http://localhost:8000';
-        statusEl.innerHTML = '<span class="error">✗ ' + err.message + '</span>';
-        console.error("Fetch error:", err);
-      }
-    });
-  </script>
+        .avatar svg { width: 100%; height: 100%; display: block; }
+
+        .header-info h2 { margin: 0; font-size: 1.1rem; color: var(--text-dark); }
+        .header-info p { margin: 0; font-size: 0.85rem; color: #555; display: flex; align-items: center; gap: 6px; }
+        .status-dot { width: 8px; height: 8px; background-color: #10B981; border-radius: 50%; }
+
+        /* --- Chat Area --- */
+        .chat-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .message-row { display: flex; align-items: flex-start; gap: 14px; animation: slideUp 0.3s ease; }
+        .user-row { flex-direction: row-reverse; }
+
+        .bubble {
+            max-width: 70%;
+            padding: 16px 22px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .bot-bubble {
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom-left-radius: 4px;
+            color: #111;
+        }
+
+        .user-bubble {
+            background: var(--primary-blue);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .timestamp {
+            font-size: 0.7rem;
+            display: block;
+            margin-top: 6px;
+            opacity: 0.6;
+            text-align: right;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Footer --- */
+        .footer {
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.4);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .docs-pill, .input-pill {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .docs-pill { padding: 12px 20px; gap: 8px; color: #555; font-size: 0.9rem; }
+        
+        /* FIX: Increased width to 40px and centered text */
+        .docs-pill input { 
+            width: 40px; 
+            background: transparent; 
+            border: none; 
+            font-weight: 600; 
+            color: var(--primary-blue); 
+            outline: none; 
+            text-align: center; 
+        }
+
+        .input-pill { flex: 1; padding: 12px 25px; }
+        .input-pill:focus-within { background: white; border-color: var(--primary-blue); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.1); }
+        .input-pill input { width: 100%; background: transparent; border: none; font-size: 1rem; outline: none; color: #111; }
+
+        .send-btn {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            border: none;
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transition: transform 0.2s;
+        }
+        .send-btn:hover { transform: scale(1.05); }
+        .send-btn svg { width: 22px; height: 22px; fill: white; margin-left: 2px; }
+
+        /* Results & Badges */
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; }
+        .bg-green { background: #D1FAE5; color: #065F46; }
+        .bg-red { background: #FEE2E2; color: #991B1B; }
+        .bg-blue { background: #DBEAFE; color: #1E40AF; }
+
+        .sources-box { margin-top: 12px; background: rgba(0,0,0,0.04); padding: 12px; border-radius: 12px; }
+        .source-item { font-size: 0.85rem; color: #444; display: block; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .source-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+        /* Typing Dots */
+        .typing { display: flex; gap: 5px; }
+        .dot { width: 6px; height: 6px; background: #999; border-radius: 50%; animation: bounce 1.4s infinite; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <div class="header">
+            <div class="avatar">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" fill="#4F46E5"/>
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="6"/>
+                    <path d="M68 68L80 80" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M40 50L48 58L60 42" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="header-info">
+                <h2>TruthLens AI</h2>
+                <p><span class="status-dot"></span> Online | Fact Verification</p>
+            </div>
+        </div>
+
+        <div id="chat-area" class="chat-area">
+            <div class="message-row">
+                <div class="avatar" style="width: 38px; height: 38px;">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="100" fill="#4F46E5"/>
+                        <circle cx="50" cy="50" r="25" stroke="white" stroke-width="6"/>
+                        <path d="M68 68L80 80" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M40 50L48 58L60 42" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="bubble bot-bubble">
+                    Hello! I'm ready to verify facts for you.
+                    <span class="timestamp">Just now</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="docs-pill" title="Number of documents">
+                <span>Docs:</span>
+                <input type="number" id="k-value" value="3" min="1" max="5">
+            </div>
+            <div class="input-pill">
+                <input type="text" id="user-input" placeholder="Type a message..." autocomplete="off">
+            </div>
+            <button class="send-btn" id="send-btn">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatArea = document.getElementById('chat-area');
+        const userInput = document.getElementById('user-input');
+        const kValue = document.getElementById('k-value');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Reusable SVG for bot messages
+        const botAvatarHTML = `
+            <div class="avatar" style="width: 38px; height: 38px;">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" fill="#4F46E5"/>
+                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="6"/>
+                    <path d="M68 68L80 80" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M40 50L48 58L60 42" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>`;
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        sendBtn.addEventListener('click', handleSend);
+
+        async function handleSend() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            userInput.value = '';
+            
+            const loadingId = addLoading();
+            scrollToBottom();
+
+            try {
+                const response = await fetch('/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: text, k: parseInt(kValue.value) || 3 })
+                });
+
+                if (!response.ok) throw new Error("Backend Error");
+                const data = await response.json();
+
+                document.getElementById(loadingId).remove();
+                displayResult(data);
+
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                addMessage("⚠️ Error: Backend not running.", 'bot');
+            }
+            scrollToBottom();
+        }
+
+        function addMessage(text, type) {
+            const row = document.createElement('div');
+            row.className = `message-row ${type}-row`;
+            
+            const avatar = type === 'bot' ? botAvatarHTML : '';
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            row.innerHTML = `
+                ${avatar}
+                <div class="bubble ${type}-bubble">
+                    ${text}
+                    <span class="timestamp">${time}</span>
+                </div>
+            `;
+            chatArea.appendChild(row);
+        }
+
+        function addLoading() {
+            const id = 'load-' + Date.now();
+            const row = document.createElement('div');
+            row.className = 'message-row';
+            row.id = id;
+            row.innerHTML = `
+                ${botAvatarHTML}
+                <div class="bubble bot-bubble">
+                    <div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                </div>`;
+            chatArea.appendChild(row);
+            return id;
+        }
+
+        function displayResult(data) {
+            const row = document.createElement('div');
+            row.className = 'message-row';
+            
+            const conf = Math.round(data.confidence * 100);
+            const statusBadge = data.abstain 
+                ? `<span class="badge bg-red">⚠️ Uncertain</span>` 
+                : `<span class="badge bg-green">✅ Verified</span>`;
+            
+            let sourcesHtml = '';
+            if (data.retrieved_docs && data.retrieved_docs.length > 0) {
+                sourcesHtml = `<div class="sources-box"><strong>Sources:</strong>`;
+                data.retrieved_docs.forEach(doc => {
+                    sourcesHtml += `<span class="source-item">• ${doc.title || 'Untitled'}</span>`;
+                });
+                sourcesHtml += `</div>`;
+            }
+
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            row.innerHTML = `
+                ${botAvatarHTML}
+                <div class="bubble bot-bubble">
+                    <div>${data.answer}</div>
+                    <div style="margin-top:10px;">${statusBadge} <span class="badge bg-blue">Conf: ${conf}%</span></div>
+                    ${sourcesHtml}
+                    <span class="timestamp">${time}</span>
+                </div>`;
+            chatArea.appendChild(row);
+        }
+
+        function scrollToBottom() {
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+    </script>
 </body>
 </html>
