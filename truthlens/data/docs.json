@@ -1,162 +1,822 @@
 [
   {
-    "id": "doc_001",
-    "text": "Alexander Fleming discovered penicillin in 1928."
+    "id": "DOC_0",
+    "text": "The Companies Act, 2013, governs the incorporation, responsibilities, and dissolution of companies in India."
   },
   {
-    "id": "doc_002",
-    "text": "Speech recognition converts spoken audio into text.\nIt uses acoustic models and language models to improve accuracy.\nIt enables hands-free control in vehicles."
+    "id": "DOC_1",
+    "text": "The Corporate Laws (Amendment) Bill, 2026, increases the Corporate Social Responsibility (CSR) applicability threshold for net profit from ₹5 crore to ₹10 crore."
   },
   {
-    "id": "doc_003",
-    "text": "An AI assistant helps users interact with the system naturally.\nIt understands user intent and provides useful responses.\nIt can control navigation, media, and phone connectivity."
+    "id": "DOC_2",
+    "text": "Every company with ten or more employees must constitute an Internal Committee under the Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013."
   },
   {
-    "id": "doc_004",
-    "text": "Bluetooth allows wireless communication between devices.\nIt is commonly used to connect smartphones to car infotainment systems.\nIt supports audio streaming and call management."
+    "id": "DOC_3",
+    "text": "The Code on Wages, 2019, mandates that overtime work must be compensated at a rate at least twice the normal wage rate."
   },
   {
-    "id": "doc_005",
-    "text": "GPS determines vehicle location using satellites.\nIt is essential for navigation and route planning.\nIt can assist in real-time traffic updates."
+    "id": "DOC_4",
+    "text": "Under the Income-tax Act, 2025, companies are required to maintain share registers and pay dividends exclusively within India from April 1, 2026."
   },
   {
-    "id": "doc_006",
-    "text": "Touchscreens allow users to interact with the infotainment system.\nThey display icons, menus, and maps.\nGestures improve usability while driving."
+    "id": "DOC_5",
+    "text": "The Limited Liability Partnership Act, 2008, provides a legal framework for businesses to operate with limited liability while maintaining the flexibility of a partnership."
   },
   {
-    "id": "doc_007",
-    "text": "User profiles store personal preferences.\nThey can include favorite radio stations and seat positions.\nProfiles enable personalization across drivers."
+    "id": "DOC_6",
+    "text": "Small companies are defined under the Companies Act with a paid-up capital limit of ₹20 crore and a turnover limit of ₹200 crore as per 2026 regulations."
   },
   {
-    "id": "doc_008",
-    "text": "Wi-Fi provides high-speed internet access inside the vehicle.\nIt can support app updates and entertainment streaming.\nPublic hotspots are sometimes used during travel."
+    "id": "DOC_7",
+    "text": "The Industrial Relations Code, 2020, consolidates laws relating to trade unions, conditions of employment, and settlement of industrial disputes."
   },
   {
-    "id": "doc_009",
-    "text": "Infotainment systems require updates to fix bugs and improve features.\nUpdates can be installed via Wi-Fi or USB.\nOver-the-air updates reduce visits to service centers."
+    "id": "DOC_8",
+    "text": "Employers must provide a free annual health check-up to all workers above the age of 40 under the Occupational Safety, Health and Working Conditions Code, 2020."
   },
   {
-    "id": "doc_010",
-    "text": "The audio system outputs sound through speakers.\nIt includes amplifiers, equalizers, and volume controls.\nIt can play music from multiple sources."
+    "id": "DOC_9",
+    "text": "The Maternity Benefit Act, 1961, entitles women employees to 26 weeks of paid maternity leave for their first two children."
   },
   {
-    "id": "doc_011",
-    "text": "Voice commands allow safe interaction while driving.\nThe system listens for trigger phrases.\nCommands are mapped to specific actions like calling a contact."
+    "id": "DOC_10",
+    "text": "Companies must hold a physical Annual General Meeting (AGM) at least once every three years, even if other meetings are held virtually."
   },
   {
-    "id": "doc_012",
-    "text": "Mobile apps enhance infotainment system features.\nCommon integrations include messaging and navigation apps.\nData sharing must be secure and authorized by the user."
+    "id": "DOC_11",
+    "text": "The Payment of Gratuity Act, 1972, makes gratuity mandatory for employees who have rendered continuous service for five years or more."
   },
   {
-    "id": "doc_013",
-    "text": "Infotainment systems often control air conditioning.\nUsers adjust temperature and airflow via touch or voice.\nAutomated climate systems improve comfort."
+    "id": "DOC_12",
+    "text": "Significant Economic Presence (SEP) for digital businesses is triggered by transactions exceeding ₹2 crore or a user base of 3 lakh in India."
   },
   {
-    "id": "doc_014",
-    "text": "Radio broadcasts provide music and news.\nFM offers better sound quality compared to AM.\nRadio presets allow quick access to favorite stations."
+    "id": "DOC_13",
+    "text": "The Employees' Provident Funds and Miscellaneous Provisions Act, 1952, provides social security through retirement benefits for factory and establishment workers."
   },
   {
-    "id": "doc_015",
-    "text": "USB supports charging and media playback.\nIt allows firmware updates through a flash drive.\nIt can also provide wired smartphone integration."
+    "id": "DOC_14",
+    "text": "Companies are prohibited from providing non-audit services to their own subsidiaries for three years after their tenure as statutory auditors ends."
   },
   {
-    "id": "doc_016",
-    "text": "Infotainment systems collect user data.\nProper encryption protects sensitive information.\nUsers must be informed about stored data."
+    "id": "DOC_15",
+    "text": "The Consumer Protection Act, 2019, establishes the Central Consumer Protection Authority (CCPA) to regulate matters relating to consumer rights and unfair trade practices."
   },
   {
-    "id": "doc_017",
-    "text": "Navigation systems calculate the best driving route.\nThey use maps and traffic data to optimize travel time.\nUsers can select preferences like avoiding tolls."
+    "id": "DOC_16",
+    "text": "One Person Companies (OPC) and small companies are required to hold only one Board Meeting per calendar year."
   },
   {
-    "id": "doc_018",
-    "text": "Maps require frequent updates to remain accurate.\nUpdates may include new roads and points of interest.\nThey are usually downloaded through the internet."
+    "id": "DOC_17",
+    "text": "The Factories Act, 1948, regulates the health, safety, and welfare of workers employed in factories across India."
   },
   {
-    "id": "doc_019",
-    "text": "Resolution determines visual clarity on screens.\nHigher pixel density improves readability.\nBright displays help visibility in daylight."
+    "id": "DOC_18",
+    "text": "Under the 2026 amendments, 21 corporate offences have been shifted from criminal liability to monetary penalties to reduce litigation."
   },
   {
-    "id": "doc_020",
-    "text": "Modern vehicles include sensors for safety and control.\nExamples include speed, temperature, and parking sensors.\nSensor data can be shown on the display."
+    "id": "DOC_19",
+    "text": "The Securities and Exchange Board of India (SEBI) regulates the securities market and protects the interests of investors in India."
   },
   {
-    "id": "doc_021",
-    "text": "Buttons on the steering wheel help operate the system.\nThey reduce distractions by allowing hands to stay on the wheel.\nCommon controls include volume and call buttons."
+    "id": "DOC_20",
+    "text": "Bonus payments are mandatory for employees who have worked for at least 30 days in an accounting year under the Code on Wages."
   },
   {
-    "id": "doc_022",
-    "text": "Lane assist helps drivers stay within lane boundaries.\nCameras monitor lane markings.\nAlerts or gentle steering corrections maintain safety."
+    "id": "DOC_21",
+    "text": "The Prevention of Money Laundering Act (PMLA), 2002, forms the core legal framework for preventing money laundering and confiscating proceeds of crime."
   },
   {
-    "id": "doc_023",
-    "text": "Blind spot sensors detect vehicles beside the car.\nWarnings appear on the mirror or screen.\nThis feature reduces lane-change accidents."
+    "id": "DOC_22",
+    "text": "Companies must report the gender composition of their workforce, including transgender employees, in their annual Board Reports."
   },
   {
-    "id": "doc_024",
-    "text": "Cameras help drivers when reversing.\nGuidelines appear on the display.\nThe system increases accuracy and safety when parking."
+    "id": "DOC_23",
+    "text": "The Contract Labour (Regulation and Abolition) Act, 1970, regulates the employment of contract labor in certain establishments."
   },
   {
-    "id": "doc_025",
-    "text": "Infotainment systems store configuration and media data.\nStorage can be on internal memory or cloud servers.\nData management ensures smooth operation."
+    "id": "DOC_24",
+    "text": "The National Financial Reporting Authority (NFRA) is the independent regulator for the auditing profession and accounting standards in India."
   },
   {
-    "id": "doc_026",
-    "text": "Vehicles often include multiple charging ports.\nThey support both wired and wireless charging options.\nFast charging keeps devices powered during travel."
+    "id": "DOC_25",
+    "text": "Fixed-term employees are entitled to all statutory benefits on par with permanent workers under the 2020 Labour Codes."
   },
   {
-    "id": "doc_027",
-    "text": "Microphones capture user speech clearly.\nNoise suppression improves accuracy of voice commands.\nPlacement helps avoid engine and road noise."
+    "id": "DOC_26",
+    "text": "The Competition Act, 2002, prohibits anti-competitive agreements and the abuse of dominant positions by enterprises."
   },
   {
-    "id": "doc_028",
-    "text": "Text-to-Speech converts text into natural audio output.\nIt reads navigation instructions and notifications.\nVoice quality improves with better AI models."
+    "id": "DOC_27",
+    "text": "Board reports must include specific reasons if the Board of Directors rejects any recommendation made by the Audit Committee."
   },
   {
-    "id": "doc_029",
-    "text": "Bluetooth enables hands-free phone calls.\nCaller information is shown on the display.\nMicrophones and speakers handle communication clearly."
+    "id": "DOC_28",
+    "text": "The Foreign Exchange Management Act (FEMA), 1999, regulates all foreign exchange transactions and external trade in India."
   },
   {
-    "id": "doc_030",
-    "text": "Screens in the rear seats provide entertainment for passengers.\nThey can stream movies or connect to gaming devices.\nControls may be integrated with the main system."
+    "id": "DOC_29",
+    "text": "Any unspent CSR funds for ongoing projects must be transferred to a specified account within 90 days of the end of the financial year."
   },
   {
-    "id": "doc_031",
-    "text": "Battery status is monitored for electric vehicles.\nThe system displays range and charging information.\nEnergy-saving modes extend driving distance."
+    "id": "DOC_30",
+    "text": "The Companies (Amendment) Bill, 2026, allows companies to serve prescribed documents to members exclusively through electronic mode."
   },
   {
-    "id": "doc_032",
-    "text": "A HUD projects key information onto the windshield.\nIt reduces the need to look away from the road.\nNavigation and speed data are commonly shown."
+    "id": "DOC_31",
+    "text": "Formal recognition of Restricted Stock Units (RSUs) and Stock Appreciation Rights (SARs) is provided under Section 62 of the Companies Act for share-linked schemes."
   },
   {
-    "id": "doc_033",
-    "text": "Some systems recognize hand gestures.\nUsers can change volume or accept calls with simple motions.\nGesture control reduces physical interaction."
+    "id": "DOC_32",
+    "text": "Companies can conduct up to two buy-back offers per year provided there is a six-month gap between the closures of such offers."
   },
   {
-    "id": "doc_034",
-    "text": "Night mode reduces screen brightness automatically.\nIt prevents glare and helps driver visibility.\nThe color theme becomes darker to improve comfort."
+    "id": "DOC_33",
+    "text": "The timeline for the registration of charges for prescribed classes of companies has been extended from 120 days to 180 days."
   },
   {
-    "id": "doc_035",
-    "text": "Some infotainment systems include a built-in app store.\nUsers can download apps like music and navigation tools.\nApps must be optimized for safe in-car use."
+    "id": "DOC_34",
+    "text": "Listed companies must hold an Extraordinary General Meeting (EGM) within seven days of notice if the meeting is conducted solely via video conferencing."
   },
   {
-    "id": "doc_036",
-    "text": "An emergency call system alerts authorities after an accident.\nIt sends location and impact information.\nThe system improves response times and safety."
+    "id": "DOC_35",
+    "text": "The Code on Social Security, 2020, mandates that fixed-term employees are eligible for gratuity after just one year of continuous service."
   },
   {
-    "id": "doc_037",
-    "text": "The digital cluster replaces traditional gauges.\nIt shows speed, alerts, and vehicle status.\nLayouts can change based on driving mode."
+    "id": "DOC_36",
+    "text": "Aggregators of gig and platform workers must contribute between 1% and 2% of their annual turnover to a dedicated social security fund."
   },
   {
-    "id": "doc_038",
-    "text": "Alerts notify the driver of potential threats.\nExamples include door unlock attempts and break-in detection.\nSecurity logs can be reviewed in the system."
+    "id": "DOC_37",
+    "text": "Employers are required to issue mandatory appointment letters to every worker to ensure formalization and job security under the 2020 Labour Codes."
   },
   {
-    "id": "doc_039",
-    "text": "Data encryption protects information stored in the vehicle.\nIt prevents unauthorized access.\nSecure keys are required to decrypt sensitive data."
+    "id": "DOC_38",
+    "text": "The maximum amount of leave that can be carried forward to a succeeding calendar year is capped at 30 days under the OSH&WC Code, 2020."
   },
   {
-    "id": "doc_040",
-    "text": "The system can store a digital version of the car manual.\nUsers can search for features and troubleshooting steps.\nImages and videos improve understanding."
+    "id": "DOC_39",
+    "text": "Women are legally permitted to work night shifts in all establishments provided their explicit consent is obtained and safety measures are verified."
+  },
+  {
+    "id": "DOC_40",
+    "text": "The Insolvency and Bankruptcy Code (Amendment) Bill, 2025, clarifies that statutory government dues do not hold the status of secured creditors."
+  },
+  {
+    "id": "DOC_41",
+    "text": "A Creditor-Initiated Insolvency Resolution Process (CIIRP) allows select financial institutions to commence insolvency proceedings out-of-court."
+  },
+  {
+    "id": "DOC_42",
+    "text": "National Company Law Tribunals (NCLT) must pass a liquidation order within 30 days from the date of an application or intimation."
+  },
+  {
+    "id": "DOC_43",
+    "text": "The 30-day reporting window for e-invoicing (IRN) is mandatory for all businesses with an aggregate annual turnover exceeding ₹10 crore."
+  },
+  {
+    "id": "DOC_44",
+    "text": "GST registrations are subject to immediate suspension if the taxpayer's bank account details remain unverified or mismatched on the portal."
+  },
+  {
+    "id": "DOC_45",
+    "text": "Input Tax Credit (ITC) claims are permanently restricted if not filed by the 30th of November following the relevant financial year."
+  },
+  {
+    "id": "DOC_46",
+    "text": "E-way bills can only be generated against base documents, such as invoices, that are dated within the prior 180 days."
+  },
+  {
+    "id": "DOC_47",
+    "text": "Reasonable assurance on \"BRSR Core\" ESG attributes is mandatory for the top 1,000 listed companies by market capitalization from FY 2026–27."
+  },
+  {
+    "id": "DOC_48",
+    "text": "The top 250 listed entities must disclose ESG performance across their value chain, covering partners accounting for 75% of total purchases or sales."
+  },
+  {
+    "id": "DOC_49",
+    "text": "SEBI (LODR) Regulations, 2026, require listed companies to formally disclose the impact of geopolitical risks on their supply chains and operations."
+  },
+  {
+    "id": "DOC_50",
+    "text": "Statutory auditors are prohibited from providing any non-audit services to a company or its subsidiaries for three years after their tenure ends."
+  },
+  {
+    "id": "DOC_51",
+    "text": "The 2026 regulations increase the paid-up capital threshold for \"small companies\" to ₹20 crore and the turnover threshold to ₹200 crore."
+  },
+  {
+    "id": "DOC_52",
+    "text": "Multi-factor authentication (MFA) is mandatory for all taxpayers accessing the GST portal as of April 1, 2025."
+  },
+  {
+    "id": "DOC_53",
+    "text": "The \"clean slate\" principle under the IBC ensures that a successful resolution applicant is not liable for the corporate debtor's past claims."
+  },
+  {
+    "id": "DOC_54",
+    "text": "Companies crossing an average annual turnover of ₹5 crore must appoint an internal auditor under the Producer Companies regulations."
+  },
+  {
+    "id": "DOC_55",
+    "text": "Late fees for GST returns are automatically calculated and blocked from submission until the outstanding amount is paid in full."
+  },
+  {
+    "id": "DOC_56",
+    "text": "The definition of \"wages\" under the 2020 Labour Codes excludes annual performance-based incentives for the purpose of statutory benefit calculations."
+  },
+  {
+    "id": "DOC_57",
+    "text": "Boards must assess and certify that every director meets the specific \"fit and proper\" criteria prescribed under the 2026 Amendment Bill."
+  },
+  {
+    "id": "DOC_58",
+    "text": "Unclaimed financial assets in mutual funds exceeding ₹5 lakh require simplified documentation for transmission to nominees under SEBI norms."
+  },
+  {
+    "id": "DOC_59",
+    "text": "The RBI's UDGAM portal provides a centralized gateway for citizens to search for unclaimed deposits across multiple banks in one place."
+  },
+  {
+    "id": "DOC_60",
+    "text": "The Corporate Laws (Amendment) Bill, 2026, decriminalizes over 20 sections of the Companies Act, converting minor technical lapses into civil wrongs."
+  },
+  {
+    "id": "DOC_61",
+    "text": "National Financial Reporting Authority (NFRA) is established as a body corporate with its own dedicated fund and expanded enforcement powers."
+  },
+  {
+    "id": "DOC_62",
+    "text": "Companies set up in International Financial Services Centres (IFSC) are permitted to maintain their share capital in foreign currencies under Section 43A."
+  },
+  {
+    "id": "DOC_63",
+    "text": "Every partner in a multi-disciplinary firm must be registered with a statutory body established under Indian law to be legally recognized."
+  },
+  {
+    "id": "DOC_64",
+    "text": "The \"fit and proper\" criteria for directors must be assessed and certified by the Board during every new appointment or tenure renewal."
+  },
+  {
+    "id": "DOC_65",
+    "text": "Directorship eligibility is automatically lost if an individual is penalized for defaults related to party transactions under Section 188."
+  },
+  {
+    "id": "DOC_66",
+    "text": "Tenure for additional directors is strictly limited to three months or the next general meeting, whichever occurs earlier, to align with SEBI norms."
+  },
+  {
+    "id": "DOC_67",
+    "text": "Whole-time Key Managerial Personnel (KMP) who are not directors are granted a formal statutory framework for resignation by notice."
+  },
+  {
+    "id": "DOC_68",
+    "text": "Periodic verification of Director Identification Number (DIN) particulars is mandatory to ensure the accuracy of the central registry."
+  },
+  {
+    "id": "DOC_69",
+    "text": "Corporate office becomes vacant across all companies if a director fails to file returns for two consecutive financial years."
+  },
+  {
+    "id": "DOC_70",
+    "text": "The Insolvency and Bankruptcy Code (Amendment) Bill, 2025, mandates that NCLTs admit insolvency applications within 14 days if default is proven."
+  },
+  {
+    "id": "DOC_71",
+    "text": "Corporate Debtors are prohibited from proposing their own Interim Resolution Professional (IRP) in voluntary insolvency applications under Section 10."
+  },
+  {
+    "id": "DOC_72",
+    "text": "The look-back period for identifying preferential and fraudulent transactions is extended to include the entire duration of a pending CIRP application."
+  },
+  {
+    "id": "DOC_73",
+    "text": "Creditors are empowered to initiate avoidance actions independently if the Resolution Professional fails to do so within the prescribed timeline."
+  },
+  {
+    "id": "DOC_74",
+    "text": "The \"clean slate\" principle is codified to ensure successful bidders are not liable for any undisclosed or past claims of the corporate debtor."
+  },
+  {
+    "id": "DOC_75",
+    "text": "Specific financial institutions can initiate the Creditor-Initiated Insolvency Resolution Process (CIIRP) without initial court intervention."
+  },
+  {
+    "id": "DOC_76",
+    "text": "E-way bills are invalid if generated against base documents, such as invoices or delivery challans, that are older than 180 days."
+  },
+  {
+    "id": "DOC_77",
+    "text": "Multi-factor authentication (MFA) is mandatory for all taxpayers accessing the GST portal as of April 1, 2025, regardless of turnover."
+  },
+  {
+    "id": "DOC_78",
+    "text": "Invoices not reported to the Invoice Registration Portal (IRP) within 30 days are automatically rejected for businesses above ₹10 crore turnover."
+  },
+  {
+    "id": "DOC_79",
+    "text": "Input Tax Credit (ITC) is permanently blocked if the relevant invoice data is not reconciled and filed by the 30th of November each year."
+  },
+  {
+    "id": "DOC_80",
+    "text": "SEBI (LODR) Amendment Regulations, 2026, mandate the direct credit of securities in dematerialized form for all investor service requests."
+  },
+  {
+    "id": "DOC_81",
+    "text": "High Value Debt Listed Entities (HVDLE) are subject to a restructured governance regime under Chapter V of the 2026 LODR amendments."
+  },
+  {
+    "id": "DOC_82",
+    "text": "Listed entities must disclose the specific impact of geopolitical risks on their business operations in their annual board reports."
+  },
+  {
+    "id": "DOC_83",
+    "text": "Stock Brokers Regulations, 2026, repeal the 1992 framework, introducing enhanced governance and stricter eligibility requirements for broking activities."
+  },
+  {
+    "id": "DOC_84",
+    "text": "The 2026 FEMA (Export & Import) Regulations enforce stricter reporting timelines for trade transactions via the EDPMS and IDPMS portals."
+  },
+  {
+    "id": "DOC_85",
+    "text": "Foreign Venture Capital Investors (FVCI) must comply with updated registration and disclosure norms as per the December 2025 SEBI amendments."
+  },
+  {
+    "id": "DOC_86",
+    "text": "Producer companies must appoint an internal auditor if their average annual turnover exceeds ₹5 crore in the preceding three years."
+  },
+  {
+    "id": "DOC_87",
+    "text": "Legal recognition of virtual AGMs is permanent, provided a physical meeting is held at least once every three years for accountability."
+  },
+  {
+    "id": "DOC_88",
+    "text": "Small companies and startups are eligible for a 50% reduction in statutory penalties for procedural defaults under Section 446B."
+  },
+  {
+    "id": "DOC_89",
+    "text": "Additional filing fees for late submissions are capped at a maximum of ₹2 lakh per document to reduce the compliance burden."
+  },
+  {
+    "id": "DOC_90",
+    "text": "The Corporate Laws (Amendment) Bill, 2026, doubles the \"small company\" paid-up capital threshold to ₹20 crore and the turnover threshold to ₹200 crore."
+  },
+  {
+    "id": "DOC_91",
+    "text": "Small companies, One Person Companies (OPC), and dormant companies are permitted to hold only one Board Meeting per calendar year."
+  },
+  {
+    "id": "DOC_92",
+    "text": "The 2026 Bill proposes the decriminalization of over 20 sections of the Companies Act, replacing several imprisonment terms with monetary penalties."
+  },
+  {
+    "id": "DOC_93",
+    "text": "Every partner in a multi-disciplinary firm must be registered with a statutory Indian body or institute to be legally recognized under the 2026 amendments."
+  },
+  {
+    "id": "DOC_94",
+    "text": "The National Financial Reporting Authority (NFRA) is reconstituted as a body corporate with its own dedicated fund and expanded enforcement powers."
+  },
+  {
+    "id": "DOC_95",
+    "text": "Notice periods for Extraordinary General Meetings (EGM) conducted fully via video conferencing are reduced from 21 days to 7 days."
+  },
+  {
+    "id": "DOC_96",
+    "text": "Companies are required to conduct a physical Annual General Meeting (AGM) at least once every three years, regardless of virtual meeting history."
+  },
+  {
+    "id": "DOC_97",
+    "text": "The Corporate Social Responsibility (CSR) net profit trigger for mandatory applicability is increased from ₹5 crore to ₹10 crore in the 2026 Bill."
+  },
+  {
+    "id": "DOC_98",
+    "text": "Companies spending up to ₹1 crore on CSR are exempt from the mandatory constitution of a CSR Committee under revised Section 135."
+  },
+  {
+    "id": "DOC_99",
+    "text": "Unspent CSR funds must be transferred to a specified government account within 30 days of the end of the financial year."
+  },
+  {
+    "id": "DOC_100",
+    "text": "The Income-tax Act, 2025, which replaces the 1961 Act, becomes fully effective for all corporate taxpayers from April 1, 2026."
+  },
+  {
+    "id": "DOC_101",
+    "text": "Under the Income Tax Rules, 2026, companies must maintain share registers and pay all dividends exclusively within India."
+  },
+  {
+    "id": "DOC_102",
+    "text": "Stock exchanges are mandated to maintain comprehensive audit trails for seven years and submit monthly reports on modified transactions."
+  },
+  {
+    "id": "DOC_103",
+    "text": "The 48-month window for filing \"Updated Returns\" is established to encourage voluntary tax compliance and reduce litigation."
+  },
+  {
+    "id": "DOC_104",
+    "text": "The Equalisation Levy on digital advertising and non-resident e-commerce operators is completely abolished as of the 2025-26 fiscal period."
+  },
+  {
+    "id": "DOC_105",
+    "text": "The Foreign Exchange Management (Export and Import) Regulations, 2026, introduce a single unified Export Declaration Form (EDF) for goods and services."
+  },
+  {
+    "id": "DOC_106",
+    "text": "Export proceeds must be realized within 15 months for standard shipments and 18 months for settlements made in Indian Rupees (INR)."
+  },
+  {
+    "id": "DOC_107",
+    "text": "Fixed timelines for import payments are replaced by terms governed primarily by the underlying contract between the parties."
+  },
+  {
+    "id": "DOC_108",
+    "text": "Authorized Dealer (AD) Banks are empowered to allow 100% write-offs for unrealized export invoices up to ₹1 million based on self-declaration."
+  },
+  {
+    "id": "DOC_109",
+    "text": "Merchanting trade transactions require both outward and inward remittances to be completed within a strict six-month window."
+  },
+  {
+    "id": "DOC_110",
+    "text": "All four Central Labour Codes—Wages, Social Security, Industrial Relations, and OSH—became officially effective on November 21, 2025."
+  },
+  {
+    "id": "DOC_111",
+    "text": "Mandatory issuance of appointment letters to every worker is required to ensure formalization of employment under the 2020 Labour Codes."
+  },
+  {
+    "id": "DOC_112",
+    "text": "Fixed-term employees (FTEs) are entitled to pro-rata gratuity after completing just one year of service instead of the standard five years."
+  },
+  {
+    "id": "DOC_113",
+    "text": "Allowances are capped at 50% of the total remuneration, ensuring that \"basic pay\" constitutes at least half of an employee's gross salary."
+  },
+  {
+    "id": "DOC_114",
+    "text": "Inter-state migrant workers are entitled to a yearly journey allowance for round-trip travel to their native place after 180 days of work."
+  },
+  {
+    "id": "DOC_115",
+    "text": "The Competition (Amendment) Act introduces a \"Deal Value Threshold\" of ₹2,000 crore for mandatory CCI approval of mergers and acquisitions."
+  },
+  {
+    "id": "DOC_116",
+    "text": "The timeline for the Competition Commission of India (CCI) to form a prima facie opinion on combinations is reduced to 30 days."
+  },
+  {
+    "id": "DOC_117",
+    "text": "The \"Settlement and Commitment\" mechanism allows enterprises under investigation for abuse of dominance to resolve cases without lengthy litigation."
+  },
+  {
+    "id": "DOC_118",
+    "text": "SEBI ICDR Amendments 2025 permit companies with outstanding Stock Appreciation Rights (SARs) to file for an Initial Public Offering (IPO)."
+  },
+  {
+    "id": "DOC_119",
+    "text": "Listed entities must implement direct credit of securities in dematerialized form for all investor service requests within 30 days of receipt."
+  },
+  {
+    "id": "DOC_120",
+    "text": "The top 1,000 listed entities by market capitalization must provide reasonable assurance on the nine ESG attributes of \"BRSR Core\" by FY 2026–27."
+  },
+  {
+    "id": "DOC_121",
+    "text": "BRSR Core acts as a subset of the wider Business Responsibility and Sustainability Report, focusing on high-intensity KPIs such as Scope 1 and 2 emissions."
+  },
+  {
+    "id": "DOC_122",
+    "text": "From FY 2025–26, the top 250 listed companies must report ESG performance for their value chain on a voluntary basis, covering 75% of purchases or sales."
+  },
+  {
+    "id": "DOC_123",
+    "text": "Value chain partners are defined as upstream and downstream entities individually accounting for 2% or more of a company’s total purchases or sales by value."
+  },
+  {
+    "id": "DOC_124",
+    "text": "Limited assurance for value chain ESG disclosures will transition from voluntary to mandatory for the top 250 entities starting in FY 2026–27."
+  },
+  {
+    "id": "DOC_125",
+    "text": "Listed companies have the option to choose between a third-party \"assessment\" or \"assurance\" for their BRSR Core KPIs as per the 2025 ease of doing business norms."
+  },
+  {
+    "id": "DOC_126",
+    "text": "Companies must disclose the \"Green Credits\" generated or procured by themselves and their top ten value chain partners in their annual reports."
+  },
+  {
+    "id": "DOC_127",
+    "text": "BRSR Core requires specific quantitative disclosures on water consumption, waste generation, and the percentage of recycled materials used in production."
+  },
+  {
+    "id": "DOC_128",
+    "text": "Social KPIs under BRSR Core include mandatory reporting on median wage ratios, employee turnover, and the percentage of women in the workforce."
+  },
+  {
+    "id": "DOC_129",
+    "text": "To ensure global comparability, greenhouse gas emission intensity ratios must now be adjusted for Purchasing Power Parity (PPP) in reported data."
+  },
+  {
+    "id": "DOC_130",
+    "text": "Assurance providers for BRSR Core are prohibited from providing any non-audit or consulting services to the same listed entity or its group companies."
+  },
+  {
+    "id": "DOC_131",
+    "text": "Listed entities entering the top 250 bracket for the first time are granted a one-year exemption from reporting previous year comparative numbers."
+  },
+  {
+    "id": "DOC_132",
+    "text": "Principle 6 of the BRSR framework requires companies to disclose the amount and nature of green loans or sustainability-linked debt they have obtained."
+  },
+  {
+    "id": "DOC_133",
+    "text": "Boards are required to formally report the impact of geopolitical risks on supply chain resilience and operational continuity under 2026 LODR updates."
+  },
+  {
+    "id": "DOC_134",
+    "text": "The Business Responsibility and Sustainability Report must be integrated into the company’s annual report and signed by a designated director or the CEO."
+  },
+  {
+    "id": "DOC_135",
+    "text": "Companies must report the number of human rights violations and the status of grievance redressal mechanisms for both permanent and contract workers."
+  },
+  {
+    "id": "DOC_136",
+    "text": "Occupational safety disclosures under BRSR Core must include the Lost Time Injury Frequency Rate (LTIFR) for all employees and workers."
+  },
+  {
+    "id": "DOC_137",
+    "text": "Listed entities must describe their engagement with vulnerable or marginalized groups as part of the \"Stakeholder Responsiveness\" principle."
+  },
+  {
+    "id": "DOC_138",
+    "text": "Corporate governance disclosures now require a breakdown of board expertise in environmental and social risk management."
+  },
+  {
+    "id": "DOC_139",
+    "text": "Statutory auditors and specialized ESG rating agencies are the only entities permitted to provide formal assurance on the BRSR Core data.SSDEs must refrain from using non-public data generated by business users on their platform to compete against those very users."
+  },
+  {
+    "id": "DOC_140",
+    "text": "The Digital Competition Bill, 2026, introduces an \"ex-ante\" regulatory framework to prevent anti-competitive conduct before it occurs in digital markets."
+  },
+  {
+    "id": "DOC_141",
+    "text": "Enterprises providing \"Core Digital Services\" (CDS) such as search engines and social media are subject to designation as Systemically Significant Digital Enterprises (SSDEs)."
+  },
+  {
+    "id": "DOC_142",
+    "text": "An entity is designated as an SSDE if its Indian turnover exceeds ₹4,000 crore or its global turnover exceeds $30 billion."
+  },
+  {
+    "id": "DOC_143",
+    "text": "The financial strength test for SSDE status also includes a global market capitalization threshold of $75 billion or a gross merchandise value in India of ₹16,000 crore."
+  },
+  {
+    "id": "DOC_144",
+    "text": "To meet the \"significant spread\" test, a core digital service must have at least 1 crore end users or 10,000 business users in India."
+  },
+  {
+    "id": "DOC_145",
+    "text": "Group entities of an SSDE involved in providing core digital services are designated as Associate Digital Enterprises (ADEs) and share the same compliance obligations."
+  },
+  {
+    "id": "DOC_146",
+    "text": "SSDEs are strictly prohibited from \"self-preferencing,\" which involves favoring their own products or services over those of third-party business users."
+  },
+  {
+    "id": "DOC_147",
+    "text": "The Bill bans \"anti-steering\" practices, ensuring SSDEs do not restrict business users from communicating offers directly to their end users."
+  },
+  {
+    "id": "DOC_148",
+    "text": "SSDEs must refrain from using non-public data generated by business users on their platform to compete against those very users"
+  },
+  {
+    "id": "DOC_149",
+    "text": "Users must be allowed to download, install, and use third-party applications and software on the SSDE's core digital service platform."
+  },
+  {
+    "id": "DOC_150",
+    "text": "The \"tying and bundling\" of additional products or services with a core digital service is prohibited unless the integration is technically integral."
+  },
+  {
+    "id": "DOC_151",
+    "text": "SSDEs are required to enable easy data portability for both business users and end users in a specified technical format."
+  },
+  {
+    "id": "DOC_152",
+    "text": "Cross-use or mixing of personal data collected from different services within the same group is prohibited without explicit user consent."
+  },
+  {
+    "id": "DOC_153",
+    "text": "The Competition Commission of India (CCI) is empowered to designate enterprises as SSDEs based on qualitative criteria even if they miss quantitative thresholds."
+  },
+  {
+    "id": "DOC_154",
+    "text": "Non-compliance with the core obligations under the Digital Competition Bill can result in civil penalties up to 10% of the enterprise's global turnover."
+  },
+  {
+    "id": "DOC_155",
+    "text": "Failure to notify the CCI of meeting the SSDE designation criteria attracts a penalty of up to 1% of the global turnover."
+  },
+  {
+    "id": "DOC_156",
+    "text": "Providing incorrect or misleading information during the designation process can lead to a fine of up to 1% of the global turnover."
+  },
+  {
+    "id": "DOC_157",
+    "text": "The Bill mandates the establishment of a transparent grievance redressal mechanism by every SSDE to address user and business complaints."
+  },
+  {
+    "id": "DOC_158",
+    "text": "A specialized \"Digital Markets Division\" within the CCI is tasked with the early detection and disposal of digital competition cases."
+  },
+  {
+    "id": "DOC_159",
+    "text": "A separate bench of the National Company Law Appellate Tribunal (NCLAT) is proposed for the expedited disposal of appeals related to digital competition."
+  },
+  {
+    "id": "DOC_160",
+    "text": "An e-commerce entity is defined under the Consumer Protection (E-Commerce) Rules, 2020, as any person who owns, operates, or manages a digital or electronic facility for electronic commerce."
+  },
+  {
+    "id": "DOC_161",
+    "text": "Marketplace e-commerce entities are prohibited from using information collected through their platform for the unfair advantage of their \"associated enterprises.\""
+  },
+  {
+    "id": "DOC_162",
+    "text": "E-commerce platforms must display the \"country of origin\" for all goods and services to enable consumers to make informed pre-purchase decisions."
+  },
+  {
+    "id": "DOC_163",
+    "text": "All e-commerce entities must appoint a nodal contact person for 24x7 coordination with law enforcement agencies and a Resident Grievance Officer."
+  },
+  {
+    "id": "DOC_164",
+    "text": "The 2026 IT Amendment Rules reduce the mandatory takedown timeline for non-consensual nudity or deepfake content from 24 hours to 2 hours."
+  },
+  {
+    "id": "DOC_165",
+    "text": "Intermediaries must now provide a \"reasoned intimation\" to users within 3 hours of taking down their content based on a government or court order."
+  },
+  {
+    "id": "DOC_166",
+    "text": "E-commerce platforms are prohibited from displaying or promoting misleading advertisements, even those generated by third-party sellers on their site."
+  },
+  {
+    "id": "DOC_167",
+    "text": "Marketplace entities have \"fallback liability\" if a seller fails to deliver goods or services, causing loss to the consumer due to negligence."
+  },
+  {
+    "id": "DOC_168",
+    "text": "Manipulation of the price of goods or services to gain unreasonable profit, often termed \"predatory pricing,\" is strictly prohibited for e-commerce entities."
+  },
+  {
+    "id": "DOC_169",
+    "text": "Consumers must provide explicit and affirmative consent for any purchase; \"pre-ticked checkboxes\" for add-on services are legally invalid."
+  },
+  {
+    "id": "DOC_170",
+    "text": "Intermediaries must inform users of their privacy policy and user agreement at least once every three months instead of the previous annual requirement."
+  },
+  {
+    "id": "DOC_171",
+    "text": "Significant Social Media Intermediaries (SSMIs) must obtain a user declaration for any \"synthetically generated information\" (SGI) prior to its publication."
+  },
+  {
+    "id": "DOC_172",
+    "text": "E-commerce entities must provide a clear \"filter mechanism\" based on the country of origin to allow users to identify domestic goods easily."
+  },
+  {
+    "id": "DOC_173",
+    "text": "The \"right to erasure\" allows consumers to request the deletion of their personal data from an e-commerce platform once the purpose of collection is met."
+  },
+  {
+    "id": "DOC_174",
+    "text": "Inventory-based e-commerce entities are treated as traditional sellers and bear direct legal responsibility for product defects and service deficiencies."
+  },
+  {
+    "id": "DOC_175",
+    "text": "Any e-commerce entity offering imported goods must clearly mention the name and details of the importer on the product listing page."
+  },
+  {
+    "id": "DOC_176",
+    "text": "\"Flash sales\" organized by fraudulently intercepting the ordinary course of business to favor specific sellers are prohibited under consumer protection norms."
+  },
+  {
+    "id": "DOC_177",
+    "text": "E-commerce platforms must acknowledge a consumer complaint within 48 hours and resolve it within one month from the date of receipt."
+  },
+  {
+    "id": "DOC_178",
+    "text": "Sellers on a marketplace must provide a written contract to the platform and appoint their own grievance officer to handle direct customer disputes."
+  },
+  {
+    "id": "DOC_179",
+    "text": "Intermediaries that deploy \"reasonable technical measures\" to remove unlawful SGI are protected under the Safe Harbour provisions of Section 79 of the IT Act."
+  },
+  {
+    "id": "DOC_180",
+    "text": "The Patents Act, 1970, provides the primary statutory framework for the registration, protection, and enforcement of patent rights in India."
+  },
+  {
+    "id": "DOC_181",
+    "text": "Under the 2025 Patents (Amendment) Rules, criminal liability for minor procedural defaults has been replaced by administrative monetary penalties."
+  },
+  {
+    "id": "DOC_182",
+    "text": "Section 120 of the Patents Act, as amended, prescribes penalties for making false or unauthorized claims of patent rights without the possibility of imprisonment."
+  },
+  {
+    "id": "DOC_183",
+    "text": "Entities must submit a statement of commercial working for every granted patent annually in Form 27 to the Controller of Patents."
+  },
+  {
+    "id": "DOC_184",
+    "text": "The Patents Act prohibits the patenting of \"business methods,\" \"mathematical algorithms,\" or \"software per se\" unless they demonstrate a technical contribution."
+  },
+  {
+    "id": "DOC_185",
+    "text": "Patent applicants can avail of \"Expedited Examination\" if they are recognized as a startup or if India is chosen as the International Searching Authority."
+  },
+  {
+    "id": "DOC_186",
+    "text": "The Trade Marks Act, 1999, protects brand identifiers such as logos, slogans, shapes, and even distinctive sound sequences used in commerce."
+  },
+  {
+    "id": "DOC_187",
+    "text": "Government filing fees for trademark applications are ₹9,000 for companies, while individuals and MSMEs are eligible for a reduced fee of ₹4,500."
+  },
+  {
+    "id": "DOC_188",
+    "text": "A registered trademark is valid for a period of ten years and can be renewed indefinitely for successive ten-year terms upon payment of fees."
+  },
+  {
+    "id": "DOC_189",
+    "text": "Section 9 of the Trade Marks Act prohibits the registration of marks that are purely descriptive or lack any inherent distinctiveness."
+  },
+  {
+    "id": "DOC_190",
+    "text": "Well-known trademarks are granted cross-category protection, preventing others from using the mark even for unrelated goods or services."
+  },
+  {
+    "id": "DOC_191",
+    "text": "The Copyright Act, 1957, identifies the \"author\" as the first owner of copyright, except in \"work-for-hire\" scenarios during the course of employment."
+  },
+  {
+    "id": "DOC_192",
+    "text": "For works created by an employee under a contract of service, the employer is deemed the first owner of the copyright unless a contract states otherwise."
+  },
+  {
+    "id": "DOC_193",
+    "text": "Copyright protection in India for literary, dramatic, and musical works lasts for the lifetime of the author plus 60 years after their death."
+  },
+  {
+    "id": "DOC_194",
+    "text": "Computer programs and databases are legally classified as \"literary works\" under Section 2(o) of the Copyright Act."
+  },
+  {
+    "id": "DOC_195",
+    "text": "The 2026 proposed amendments to the Designs Act, 2000, aim to extend protection to virtual designs, including GUIs and immersive virtual environments."
+  },
+  {
+    "id": "DOC_196",
+    "text": "Industrial designs are protected for an initial term of ten years, which can be extended by a single five-year period upon application."
+  },
+  {
+    "id": "DOC_197",
+    "text": "Section 15(2) of the Copyright Act stipulates that copyright in a design ceases if it is reproduced more than 50 times through an industrial process without registration."
+  },
+  {
+    "id": "DOC_198",
+    "text": "A 12-month grace period is proposed in 2026 to allow creators to disclose designs at exhibitions or demos without losing the \"novelty\" required for registration."
+  },
+  {
+    "id": "DOC_199",
+    "text": "The Geographical Indications of Goods Act, 1999, protects collective rights for producers of goods originating from a specific region with a unique reputation."
+  },
+  {
+    "id": "DOC_200",
+    "text": "Unlike other IP rights, Geographical Indications (GI) cannot be assigned, licensed, or transmitted to an individual or a single corporation."
+  },
+  {
+    "id": "DOC_201",
+    "text": "The Register of Designs, maintained at the Patent Office in Kolkata, is a public document available for inspection upon payment of prescribed fees."
+  },
+  {
+    "id": "DOC_202",
+    "text": "Unauthorized use of a registered GI that misleads the public about the true origin of a product is punishable by imprisonment up to three years."
+  },
+  {
+    "id": "DOC_203",
+    "text": "Companies can protect \"Trade Secrets\" in India through common law and specific non-disclosure and confidentiality clauses in employment or vendor contracts."
+  },
+  {
+    "id": "DOC_204",
+    "text": "The Semiconductor Integrated Circuits Layout-Design Act, 2000, provides specialized protection for original layout designs for a period of ten years."
   }
 ]

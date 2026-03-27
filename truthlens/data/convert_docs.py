@@ -2,27 +2,62 @@ import json
 import pickle
 import os
 
-# Read the JSON file
-json_path = "truthlens/data/docs.json"
-pkl_path = "truthlens/data/docs.pkl"
-
-with open(json_path, "r", encoding="utf-8") as f:
-    docs = json.load(f)
-
-# Convert id format from "doc_001" to "DOC_0", "DOC_1", etc. (if needed)
-# Or keep the original IDs - adjust based on your preference
-for i, doc in enumerate(docs):
-    # Option 1: Use sequential DOC_0, DOC_1, DOC_2...
-    doc["id"] = f"DOC_{i}"
+def convert_docs():
+    """
+    Converts data.txt into docs.json and then docs.pkl
+    Each line in data.txt becomes a separate document
+    """
     
-    # Option 2: Keep original IDs (comment out line above, uncomment below)
-    # pass
+    input_file = "truthlens/data/data.txt"
+    json_output = "truthlens/data/docs.json"
+    pkl_output = "truthlens/data/docs.pkl"
+    
+    # Check if input file exists
+    if not os.path.exists(input_file):
+        print(f"❌ Error: {input_file} not found!")
+        return
+    
+    print(f"📖 Reading {input_file}...")
+    
+    # Read data.txt and split by lines
+    with open(input_file, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    
+    # Create documents list
+    docs = []
+    for idx, line in enumerate(lines):
+        line = line.strip()
+        if line:  # Skip empty lines
+            doc = {
+                "id": f"DOC_{idx}",
+                "text": line
+            }
+            docs.append(doc)
+    
+    print(f"✓ Loaded {len(docs)} documents from data.txt")
+    
+    # Save as JSON
+    with open(json_output, "w", encoding="utf-8") as f:
+        json.dump(docs, f, indent=2, ensure_ascii=False)
+    
+    print(f"✓ Saved {json_output}")
+    
+    # Save as pickle
+    with open(pkl_output, "wb") as f:
+        pickle.dump(docs, f)
+    
+    print(f"✓ Saved {pkl_output}")
+    print(f"\n📊 Summary:")
+    print(f"  Total documents: {len(docs)}")
+    print(f"  Sample doc: {docs[0]}")
+    
+    return docs
 
-print(f"Loaded {len(docs)} documents from {json_path}")
-
-# Save as pickle
-with open(pkl_path, "wb") as f:
-    pickle.dump(docs, f)
-
-print(f"Saved to {pkl_path}")
-print(f"Sample doc: {docs[0]}")
+if __name__ == "__main__":
+    print("=" * 60)
+    print("Converting data.txt → docs.json → docs.pkl")
+    print("=" * 60)
+    convert_docs()
+    print("=" * 60)
+    print("✅ Conversion complete!")
+    print("=" * 60)
