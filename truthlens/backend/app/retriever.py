@@ -6,7 +6,7 @@ from typing import List, Dict
 from sentence_transformers import SentenceTransformer, util
 
 # Load docs at startup
-DOC_PATH = "truthlens/backend/data/docs.pkl"
+DOC_PATH = "truthlens/data/docs.pkl"
 
 if os.path.exists(DOC_PATH):
     with open(DOC_PATH, "rb") as f:
