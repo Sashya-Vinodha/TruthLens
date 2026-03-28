@@ -7,3 +7,4 @@ numpy
 google-generativeai
 pydantic
 faiss-cpu   # optional; if this fails, see FAISS note below
+rank-bm25

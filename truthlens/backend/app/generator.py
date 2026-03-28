@@ -48,38 +48,23 @@ def _call_gemini(api_key: str, question: str, retrieved_docs: list) -> str:
     MODEL_NAME = "models/gemini-2.5-pro"
     model = genai.GenerativeModel(MODEL_NAME)
 
-    context_str = _build_context_string(retrieved_docs)
+    context_str = _build_context(retrieved_docs)
 
-    prompt = f"""You are a precise verification assistant. Answer the question using ONLY the provided documents below.
+    prompt = f"""
+Answer strictly from the provided context and include inline citations like [DOC_i].
 
-Rules:
-1. You must use ONLY the provided context. Do not use outside knowledge.
-2. Every factual statement MUST be immediately followed by a citation in the format [DOC_i], where i is the index of the document.
-3. If the provided documents do not contain enough information to answer the question, respond exactly with: "I abstain — evidence insufficient."
+If the user's question contains incorrect assumptions but the context has corrective facts, briefly correct the assumption and provide the accurate answer with citations.
 
----
-Few-Shot Examples:
+Only respond with "I don't have enough information." when the context truly lacks the necessary facts to answer or correct the question.
 
 Context:
-[DOC_0] The Eiffel Tower is located in Paris, France. It was constructed in 1889.
-[DOC_1] The Statue of Liberty is in New York.
-
-Question: Where is the Eiffel Tower?
-Answer: The Eiffel Tower is located in Paris, France [DOC_0].
-
-Context:
-[DOC_0] Apples are a type of fruit.
-[DOC_1] Bananas are rich in potassium.
-
-Question: Who was the first president of the USA?
-Answer: I abstain — evidence insufficient.
----
-
-Current Context:
 {context_str}
 
-Question: {question}
-Answer:"""
+Question:
+{question}
+
+Answer:
+"""
 
     logger.info(f"Calling Gemini model: {MODEL_NAME}")
 

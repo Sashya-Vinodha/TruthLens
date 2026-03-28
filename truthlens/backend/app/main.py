@@ -75,6 +75,17 @@ def query(req: QueryRequest) -> Dict[str, Any]:
         logger.error(f"Retriever failed: {e}")
         raise HTTPException(status_code=500, detail=f"Retriever error: {e}")
 
+    if not docs:
+        # Hard abstain when nothing relevant is found
+        return {
+            "question": question,
+            "answer": "No relevant information found in dataset.",
+            "confidence": 0.0,
+            "abstain": True,
+            "verifier": {},
+            "retrieved_docs": []
+        }
+
     # 2) Generate answer
     try:
         answer = generator.generate_answer(question, docs)
@@ -97,12 +108,31 @@ def query(req: QueryRequest) -> Dict[str, Any]:
         logger.error(f"Fusion failed: {e}")
         raise HTTPException(status_code=500, detail=f"Fusion error: {e}")
 
+    # Ensure each retrieved doc has a title for the frontend Sources panel.
+    retrieved_docs = []
+    for doc in docs:
+        text = doc.get("text", "")
+        retrieved_docs.append({
+            "id": doc.get("id"),
+            "text": text,
+            "title": doc.get("title", text[:60])
+        })
+
+    final_confidence = fusion_output.get("confidence", 0.0)
+    final_answer = answer
+    final_abstain = fusion_output.get("abstain")
+
+    if final_confidence is None:
+        final_confidence = 0.0
+    if final_abstain is None:
+        final_abstain = False
+
     # Final JSON response
     return {
         "question": question,
-        "answer": answer,
-        "confidence": fusion_output.get("confidence"),
-        "abstain": fusion_output.get("abstain"),
+        "answer": final_answer,
+        "confidence": final_confidence,
+        "abstain": final_abstain,
         "verifier": verification,
-        "retrieved_docs": docs
+        "retrieved_docs": retrieved_docs
     }
