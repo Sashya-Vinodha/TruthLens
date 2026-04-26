@@ -263,6 +263,10 @@
 
         sendBtn.addEventListener('click', handleSend);
 
+        const API_BASE = window.location.port === '8000'
+            ? window.location.origin
+            : 'http://127.0.0.1:8000';
+
         async function handleSend() {
             const text = userInput.value.trim();
             if (!text) return;
@@ -274,13 +278,16 @@
             scrollToBottom();
 
             try {
-                const response = await fetch('/query', {
+                const response = await fetch(`${API_BASE}/query`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ question: text, k: parseInt(kValue.value) || 3 })
                 });
 
-                if (!response.ok) throw new Error("Backend Error");
+                if (!response.ok) {
+                    const backendText = await response.text();
+                    throw new Error(`Backend error (${response.status}): ${backendText || response.statusText}`);
+                }
                 const data = await response.json();
 
                 document.getElementById(loadingId).remove();
@@ -288,7 +295,7 @@
 
             } catch (error) {
                 document.getElementById(loadingId).remove();
-                addMessage("⚠️ Error: Backend not running.", 'bot');
+                addMessage(`⚠️ Error: ${error.message}`, 'bot');
             }
             scrollToBottom();
         }

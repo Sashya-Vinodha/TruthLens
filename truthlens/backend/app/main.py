@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Any, Dict
 import logging
+from pathlib import Path
 
 # ---------------------------
 # Import your backend modules
@@ -15,6 +16,7 @@ from . import retriever
 from . import generator
 from . import verifier as verifier_module
 from . import fusion as fusion_module
+from .utils import ABSTAIN_MESSAGE, topic_match
 
 Verifier = verifier_module.Verifier
 
@@ -27,15 +29,20 @@ logger = logging.getLogger(__name__)
 # ---------------------------
 app = FastAPI(title="TruthLens - RAG Guardrail Prototype")
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+FRONTEND_PUBLIC = PROJECT_ROOT / "frontend" / "public"
+
 # 1) Serve static frontend at /static
-app.mount("/static",
-          StaticFiles(directory="truthlens/frontend/public"),
-          name="static")
+if FRONTEND_PUBLIC.exists():
+    app.mount("/static", StaticFiles(directory=str(FRONTEND_PUBLIC)), name="static")
 
 # 2) Serve index.html at root "/"
 @app.get("/", include_in_schema=False)
 def root():
-    return FileResponse("truthlens/frontend/public/index.html")
+    index_path = FRONTEND_PUBLIC / "index.html"
+    if not index_path.exists():
+        raise HTTPException(status_code=404, detail="Frontend not available")
+    return FileResponse(str(index_path))
 
 # Enable CORS (frontend -> backend communication)
 app.add_middleware(
@@ -52,6 +59,21 @@ app.add_middleware(
 class QueryRequest(BaseModel):
     question: str
     k: int = 3
+
+
+STRICT_SUPPORT_THRESHOLD = 0.65
+MIN_RETRIEVAL_SCORE = 0.4
+
+
+def abstain_response(question: str, retrieved_docs: list[dict] | None = None) -> Dict[str, Any]:
+    return {
+        "question": question,
+        "answer": ABSTAIN_MESSAGE,
+        "confidence": 0.0,
+        "abstain": True,
+        "verifier": {},
+        "retrieved_docs": retrieved_docs or []
+    }
 
 # ---------------------------
 # HEALTH CHECK
@@ -76,15 +98,29 @@ def query(req: QueryRequest) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"Retriever error: {e}")
 
     if not docs:
-        # Hard abstain when nothing relevant is found
-        return {
-            "question": question,
-            "answer": "No relevant information found in dataset.",
-            "confidence": 0.0,
-            "abstain": True,
-            "verifier": {},
-            "retrieved_docs": []
-        }
+        return abstain_response(question)
+
+    retrieved_docs = []
+    for doc in docs:
+        text = doc.get("text", "")
+        retrieved_docs.append({
+            "id": doc.get("id"),
+            "text": text,
+            "title": doc.get("title", text[:60])
+        })
+
+    doc_texts = [d.get("text", "") for d in docs if d.get("text", "").strip()]
+
+    if len(doc_texts) == 0:
+        return abstain_response(question, retrieved_docs)
+
+    if not topic_match(question, doc_texts):
+        print("🚫 TOPIC MISMATCH - ABSTAINING")
+        return abstain_response(question, retrieved_docs)
+
+    best_score = max(float(doc.get("score", 1.0)) for doc in docs)
+    if best_score < MIN_RETRIEVAL_SCORE:
+        return abstain_response(question, retrieved_docs)
 
     # 2) Generate answer
     try:
@@ -108,16 +144,6 @@ def query(req: QueryRequest) -> Dict[str, Any]:
         logger.error(f"Fusion failed: {e}")
         raise HTTPException(status_code=500, detail=f"Fusion error: {e}")
 
-    # Ensure each retrieved doc has a title for the frontend Sources panel.
-    retrieved_docs = []
-    for doc in docs:
-        text = doc.get("text", "")
-        retrieved_docs.append({
-            "id": doc.get("id"),
-            "text": text,
-            "title": doc.get("title", text[:60])
-        })
-
     final_confidence = fusion_output.get("confidence", 0.0)
     final_answer = answer
     final_abstain = fusion_output.get("abstain")
@@ -126,6 +152,16 @@ def query(req: QueryRequest) -> Dict[str, Any]:
         final_confidence = 0.0
     if final_abstain is None:
         final_abstain = False
+
+    if verification.get("overall_support", 0.0) < STRICT_SUPPORT_THRESHOLD:
+        final_abstain = True
+
+    if any(not claim.get("supported", False) for claim in verification.get("claims", [])):
+        final_abstain = True
+
+    if final_abstain:
+        final_answer = ABSTAIN_MESSAGE
+        final_confidence = min(final_confidence, 0.25)
 
     # Final JSON response
     return {

@@ -1,42 +1,47 @@
 import re
-from typing import List, Dict, Any
-from sentence_transformers import SentenceTransformer, util
-from transformers import pipeline
+from typing import Any, Dict, List
 import logging
+
+from .utils import extract_years, sentence_split, sentence_support_score
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
 
-EMBED_MODEL_NAME = "all-MiniLM-L6-v2"
-NLI_MODEL_NAME = "typeform/distilbert-base-uncased-mnli"  # lighter & stable
-
-
 class Verifier:
     def __init__(self):
-        logger.info("Loading embedding model...")
-        self.embed_model = SentenceTransformer(EMBED_MODEL_NAME)
-
-        logger.info("Loading NLI model...")
-        self.nli_pipe = pipeline(
-            "text-classification",
-            model=NLI_MODEL_NAME,
-            device=-1  # keep CPU for stability
-        )
+        self.embed_model = None
+        self.nli_pipe = None
 
     def _split_into_sentences(self, text: str) -> List[str]:
-        sents = re.split(r'(?<=[.?!])\s+', text.strip())
-        return [s.strip() for s in sents if s.strip()] or [text.strip()]
+        return sentence_split(text) or [text.strip()]
 
     def _best_doc_sentence(self, claim: str, doc_text: str):
         doc_sents = self._split_into_sentences(doc_text)
 
-        claim_emb = self.embed_model.encode(claim, convert_to_tensor=True)
-        doc_embs = self.embed_model.encode(doc_sents, convert_to_tensor=True)
+        best_sentence = doc_text.strip()
+        best_score = 0.0
 
-        sims = util.cos_sim(claim_emb, doc_embs).cpu().numpy().flatten()
+        for sentence in doc_sents:
+            score = sentence_support_score(claim, sentence)
+            if score > best_score:
+                best_sentence = sentence
+                best_score = score
 
-        best_idx = int(sims.argmax())
-        return doc_sents[best_idx], float(sims[best_idx])
+        return best_sentence, best_score
+
+    def _claim_supported(self, claim: str, doc_text: str) -> Dict[str, Any]:
+        best_sentence, best_score = self._best_doc_sentence(claim, doc_text)
+        claim_years = extract_years(claim)
+        sentence_years = extract_years(best_sentence)
+        year_match = not claim_years or any(year in sentence_years or year in doc_text for year in claim_years)
+
+        supported = best_score >= 0.55 and year_match
+        return {
+            "best_sentence": best_sentence,
+            "score": round(best_score, 4),
+            "supported": supported,
+            "year_match": year_match,
+        }
 
     def verify(self, generated_text: str, retrieved_docs: List[Any]) -> Dict[str, Any]:
 
@@ -56,13 +61,34 @@ class Verifier:
                     "title": str(d)[:50]
                 })
 
-        claims = re.split(r'(?<=[.?!])\s+', generated_text)
-        claims = [c.strip() for c in claims if c.strip()]
+        if not generated_text or not generated_text.strip():
+            return {"claims": [], "overall_support": 0.0}
+
+        claims = sentence_split(generated_text)
+        if not claims:
+            claims = [generated_text.strip()]
 
         results = []
         total_score = 0.0
 
         for claim in claims:
+
+            normalized_claim = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\s]", " ", claim.lower())).strip()
+            if normalized_claim in {"no that is incorrect", "that is incorrect"}:
+                results.append({
+                    "text": claim,
+                    "cited_doc_idx": None,
+                    "cited_doc_id": None,
+                    "title": None,
+                    "best_doc_sentence": "",
+                    "sim": 1.0,
+                    "nli_label": "NEUTRAL",
+                    "nli_score": 1.0,
+                    "score": 1.0,
+                    "supported": True,
+                })
+                total_score += 1.0
+                continue
 
             best_sim = 0.0
             best_sent = ""
@@ -70,9 +96,26 @@ class Verifier:
             best_doc_id = None
             best_title = None
 
+            if claim.lower() in {"not found", "i don't have enough information", "i do not have enough information"}:
+                results.append({
+                    "text": claim,
+                    "cited_doc_idx": None,
+                    "cited_doc_id": None,
+                    "title": None,
+                    "best_doc_sentence": "",
+                    "sim": 0.0,
+                    "nli_label": "NEUTRAL",
+                    "nli_score": 0.0,
+                    "score": 0.0,
+                    "supported": False,
+                })
+                continue
+
             # 🔍 Find best matching doc sentence
             for i, doc in enumerate(norm_docs):
-                sent, sim = self._best_doc_sentence(claim, doc["text"])
+                support = self._claim_supported(claim, doc["text"])
+                sent = support["best_sentence"]
+                sim = support["score"]
                 if sim > best_sim:
                     best_sim = sim
                     best_sent = sent
@@ -80,36 +123,10 @@ class Verifier:
                     best_doc_id = doc.get("id")
                     best_title = doc.get("title")
 
-            # 🧠 NLI (only if needed)
-            best_nli_score = 0.0
-            best_nli_label = "NEUTRAL"
-
-            if best_sim > 0.8:
-                # 🔥 Strong match → skip NLI
-                best_nli_score = 1.0
-                best_nli_label = "ENTAILMENT"
-            else:
-                try:
-                    nli_input = f"{best_sent} </s></s> {claim}"
-                    nli_out = self.nli_pipe(nli_input)
-
-                    best_nli_score = float(nli_out[0]["score"])
-                    best_nli_label = nli_out[0]["label"]
-
-                except Exception:
-                    best_nli_score = 0.5
-                    best_nli_label = "NEUTRAL"
-
-            # 🎯 Combined scoring (tuned)
-            combined = (0.85 * best_sim) + (0.15 * best_nli_score)
-
-            # 🔥 Boost if strong similarity
-            if best_sim > 0.75:
-                combined += 0.1
-
-            combined = min(combined, 1.0)
-
-            supported = combined > 0.6
+            combined = min(1.0, best_sim)
+            supported = combined >= 0.55
+            best_nli_score = combined
+            best_nli_label = "ENTAILMENT" if supported else "NEUTRAL"
 
             results.append({
                 "text": claim,
