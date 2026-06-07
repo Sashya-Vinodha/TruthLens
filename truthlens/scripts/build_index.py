@@ -1,96 +1,82 @@
-import os
 import json
 import pickle
-import re
-import fitz  # PyMuPDF
 from pathlib import Path
+from docling.document_converter import DocumentConverter
+import logging
 
-SCRIPT_PATH = Path(__file__).resolve()
-PROJECT_ROOT = SCRIPT_PATH.parents[1]
-OUTPUT_DIR = PROJECT_ROOT / "backend" / "data"
-RAW_DATA_DIR = OUTPUT_DIR / "raw"
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+logger = logging.getLogger(__name__)
 
-def parse_pdf_to_chunks(file_path: Path, source_prefix: str, max_words: int = 150) -> list[dict]:
-    print(f"📖 Extracting text from {file_path.name} with PyMuPDF...")
-    
-    # PyMuPDF naturally ignores kerning spaces and extracts clean text natively
-    doc = fitz.open(file_path)
-    full_text = []
-    
-    for page in doc:
-        text = page.get_text("text")
-        if text:
-            # Clean up standard hyphens at the end of lines
-            text = re.sub(r'-\n', '', text)
-            full_text.append(text)
-            
-    # Squash remaining visual line breaks
-    clean_text = re.sub(r'\s+', ' ', " ".join(full_text)).strip()
-    
-    # Split strictly into sentences
-    sentences = re.split(r'(?<=[.!?])\s+', clean_text)
-    
-    chunks = []
-    current_chunk = []
-    word_count = 0
-    chunk_idx = 0
-    
-    for sentence in sentences:
-        if not sentence.strip():
-            continue
-            
-        sentence_words = sentence.strip().split()
-        if word_count + len(sentence_words) > max_words and current_chunk:
-            combined_text = " ".join(current_chunk)
-            chunks.append({
-                "id": f"{source_prefix}_{chunk_idx}",
-                "title": f"{source_prefix} - {combined_text[:50].strip()}...",
-                "text": combined_text
-            })
-            chunk_idx += 1
-            current_chunk = [current_chunk[-1]]
-            word_count = len(current_chunk[0].split())
-            
-        current_chunk.append(sentence.strip())
-        word_count += len(sentence_words)
-        
-    if current_chunk:
-        combined_text = " ".join(current_chunk)
-        chunks.append({
-            "id": f"{source_prefix}_{chunk_idx}",
-            "title": f"{source_prefix} - {combined_text[:50].strip()}...",
-            "text": combined_text
-        })
-        
-    return chunks
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / "backend" / "data"
+PDF_DIR = OUTPUT_DIR / "raw"
 
-def run_pipeline():
-    print(f"🎯 Target output directory set to: {OUTPUT_DIR}")
-    if not RAW_DATA_DIR.exists():
-        print(f"❌ Error: Raw directory does not exist at {RAW_DATA_DIR}")
+def process_regulatory_pdfs():
+    converter = DocumentConverter()
+    all_hierarchical_chunks = []
+    
+    if not PDF_DIR.exists():
+        logger.error(f"❌ Raw directory does not exist at {PDF_DIR}")
         return
-        
-    pdf_files = list(RAW_DATA_DIR.glob("*.pdf"))
+
+    pdf_files = list(PDF_DIR.glob("*.pdf"))
     if not pdf_files:
-        print(f"❌ Error: No PDFs found in {RAW_DATA_DIR}")
+        logger.error(f"❌ No PDFs found in {PDF_DIR}")
         return
-        
-    all_chunks = []
-    for pdf_path in pdf_files:
-        prefix = pdf_path.stem[:8].upper().replace(".", "_")
-        all_chunks.extend(parse_pdf_to_chunks(pdf_path, prefix))
-        
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
+    for pdf_path in pdf_files:
+        logger.info(f"📄 Processing: {pdf_path.name}")
+        doc = converter.convert(pdf_path).document
+        
+        sections = {}
+        current_section = "General"
+        sections[current_section] = []
+        
+        for item in doc.texts:
+            if item.label == "section_header":
+                current_section = item.text.strip()
+                if current_section not in sections:
+                    sections[current_section] = []
+            elif item.label in ["text", "list_item", "figure_caption"]:
+                sections[current_section].append(item.text.strip())
+                
+        for sec_name, texts in sections.items():
+            # Preserve paragraph boundaries
+            full_section_text = "\n\n".join(texts)
+            words = full_section_text.split()
+            
+            MAX_WORDS = 200
+            OVERLAP = 30
+            
+            if not words: 
+                continue
+            
+            # THE SLICER: Overlapping chunk generation
+            for i in range(0, len(words), MAX_WORDS - OVERLAP):
+                chunk_words = words[i:i + MAX_WORDS]
+                chunk_text = " ".join(chunk_words)
+                
+                if len(chunk_words) > 10:
+                    all_hierarchical_chunks.append({
+                        "id": f"{pdf_path.stem}_{len(all_hierarchical_chunks)}",
+                        "title": f"[{sec_name}] {pdf_path.stem}",
+                        "source_doc": pdf_path.stem,
+                        "parent_section": sec_name,
+                        "text": f"[Section: {sec_name}]\n{chunk_text}"
+                    })
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Save JSON
     json_path = OUTPUT_DIR / "docs.json"
     with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(all_chunks, f, indent=2)
+        json.dump(all_hierarchical_chunks, f, indent=2)
         
+    # Save Pickle (Required for the FAISS indexer)
     pkl_path = OUTPUT_DIR / "docs.pkl"
     with open(pkl_path, "wb") as f:
-        pickle.dump(all_chunks, f)
+        pickle.dump(all_hierarchical_chunks, f)
         
-    print(f"✅ Clean database successfully generated with {len(all_chunks)} chunks!")
+    logger.info(f"✅ Built hierarchical DB with {len(all_hierarchical_chunks)} BULLETPROOF chunks.")
 
 if __name__ == "__main__":
-    run_pipeline()
+    process_regulatory_pdfs()
