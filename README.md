@@ -32,6 +32,7 @@ TruthLens moves away from simplistic binary "correct/incorrect" flags, implement
 * Renders exact reference documentation snippets to ensure human-in-the-loop auditability.
 
 ---
+
 ### Architecture Flow
 
 ```mermaid
@@ -48,7 +49,8 @@ graph TD
     H --> K((React Audit UI))
     I --> K
     J --> K
-    
+```
+
 ## 🛠️ Tech Stack
 
 **Backend & Verification Engine:**
@@ -80,3 +82,7 @@ The system routing logic handles three distinct epistemic states:
 ### Test B: Strict Boundary Enforcement (Off-Topic Mitigation)
 * **Query:** *"What are the SEC compliance regulations for using AI in cryptocurrency trading?"*
 * **System Action:** Intercepts out-of-corpus parameters, flags `final_abstain = True`, and updates the response layout to `⚪ Out Of Corpus` with clean audit-trail dismissal.
+
+### Test C: Hallucination & Contradiction Blocking
+* **Query:** *"According to the documents, is it acceptable for an AI system to bypass safety protocols to improve performance?"*
+* **System Action:** NLI Verifier extracts claims, detects a logical `CONTRADICTION` against the retrieved NIST guidelines, triggers the secure fallback protocol, and renders a `🛑 Blocked (Hallucination Detected)` state.
