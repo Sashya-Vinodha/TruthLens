@@ -1,7 +1,5 @@
 # TruthLens: Enterprise-Grade Retrieval-Augmented Verification (RAG+V)
 
-> **Research Publication Impact:** This architecture expands on the foundational real-time system paradigms published in my peer-reviewed paper: *"Development of a Multi-Module AI Infotainment System for Real-Time Assistance and Control"* (International Journal, Issue - May 2026).
-
 TruthLens is an advanced RAG Guardrail and factual verification system designed to reduce hallucinations and enforce strict epistemic boundaries in Large Language Model (LLM) pipelines. 
 
 **TruthLens was developed to address a critical limitation of modern LLM systems: the tendency to generate confident answers even when supporting evidence is weak, missing, or entirely outside the system's knowledge boundary.**
