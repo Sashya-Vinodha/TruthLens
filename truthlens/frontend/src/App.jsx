@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import ReactMarkdown from 'react-markdown';
 
 const API_BASE =
   typeof window !== "undefined" && window.location.port === "8000"
@@ -46,8 +47,7 @@ function App() {
       id: "welcome",
       type: "ai",
       answer: "Hello. I am ready to verify facts for you.",
-      confidence: null,
-      verified: false,
+      abstain: false,
       retrieved_docs: [],
       timestamp: "Just now",
     },
@@ -103,8 +103,8 @@ function App() {
           id: `ai-${Date.now()}`,
           type: "ai",
           answer: data.answer,
-          confidence: Number(data.confidence) || 0,
-          verified: !data.abstain,
+          safety_status: data.safety_status,     
+          evidence_label: data.evidence_label,   
           abstain: data.abstain,
           retrieved_docs: data.retrieved_docs || [],
           timestamp: new Date().toLocaleTimeString([], {
@@ -120,8 +120,8 @@ function App() {
           id: `error-${Date.now()}`,
           type: "ai",
           answer: `Error: ${error.message}`,
-          confidence: null,
-          verified: false,
+          safety_status: "Error",
+          abstain: true,
           retrieved_docs: [],
           timestamp: new Date().toLocaleTimeString([], {
             hour: "2-digit",
@@ -161,7 +161,6 @@ function App() {
       <div className="chat-area">
         {messages.map((message) => {
           const isAi = message.type === "ai";
-          const confidence = Math.max(0, Math.min(1, message.confidence ?? 0));
 
           return (
             <div
@@ -172,35 +171,55 @@ function App() {
               <div
                 className={
                   isAi
-                    ? `bubble ai-bubble ai-message ${message.verified ? "verified" : ""}`
+                    ? `bubble ai-bubble ai-message ${!message.abstain && message.id !== 'welcome' ? "verified" : ""}`
                     : "bubble user-bubble"
                 }
               >
-                <div>{message.answer}</div>
+                  <div className="markdown-body">
+                    <ReactMarkdown>{message.answer}</ReactMarkdown>
+                  </div>
 
-                {isAi && message.confidence !== null && (
-                  <>
-                    <div className="result-row">
-                      <span className={message.verified ? "badge verified-badge" : "badge uncertain-badge"}>
-                        {message.verified ? "Verified" : "Uncertain"}
+                {/* THE NEW DUAL-BADGE RENDER BLOCK */}
+                {isAi && message.safety_status && message.id !== 'welcome' && (
+                  <div className="result-row">
+                    <span className={message.abstain ? "badge badge-blocked" : "badge badge-safe"}>
+                      {message.abstain ? "🛑 " : "🟢 "}{message.safety_status}
+                    </span>
+                    
+                    {message.evidence_label && (
+                      <span className={
+                        message.evidence_label === "Direct Evidence" ? "badge badge-direct" : 
+                        message.evidence_label === "Inferred From Sources" ? "badge badge-inferred" : 
+                        message.evidence_label === "Domain Extrapolation" ? "badge badge-extrapolation" :
+                        message.evidence_label === "Out Of Corpus" ? "badge badge-out-of-corpus" :
+                        "badge badge-unsupported"
+                      }>
+                        {message.evidence_label === "Direct Evidence" ? "🎯 Direct Evidence" : 
+                          message.evidence_label === "Inferred From Sources" ? "🔗 Inferred From Sources" : 
+                          message.evidence_label === "Domain Extrapolation" ? "⚖️ Domain Extrapolation" : 
+                          message.evidence_label === "Out Of Corpus" ? "⚪ Out Of Corpus" : 
+                          "⚠️ Contradicted / Unsupported"}
                       </span>
-                    </div>
-                    <div className="confidence-bar">
-                      <div
-                        className="confidence-fill"
-                        style={{ width: `${confidence * 100}%` }}
-                      />
-                    </div>
-                  </>
+                    )}
+                  </div>
                 )}
 
+                {/* THE NEW SOURCE AUDIT TRAIL BLOCK */}
                 {isAi && message.retrieved_docs?.length > 0 && (
                   <div className="sources-box">
-                    <strong>Sources:</strong>
+                    <strong>Audit Trail:</strong>
                     {message.retrieved_docs.map((doc, index) => (
-                      <span className="source-item" key={`${doc.title || "Untitled"}-${index}`}>
-                        {doc.title || "Untitled"}
-                      </span>
+                      <div className="source-item" key={`doc-${index}`}>
+                        <div className="source-header">
+                          <span className="source-doc">📄 Source Document</span>
+                          <span className="source-section">{doc.title || "Untitled Section"}</span>
+                        </div>
+                        {doc.text && (
+                          <div className="source-snippet">
+                            "{doc.text.substring(0, 140)}..."
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
                 )}

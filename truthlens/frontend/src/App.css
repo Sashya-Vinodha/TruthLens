@@ -285,14 +285,68 @@ input {
   font-weight: 600;
 }
 
-.verified-badge {
+.badge-safe {
   color: #bbf7d0;
   background: rgba(34, 197, 94, 0.14);
 }
 
-.uncertain-badge {
+.badge-blocked {
   color: #fecaca;
   background: rgba(239, 68, 68, 0.14);
+}
+
+.badge-strong {
+  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.badge-abstracted {
+  color: #bfdbfe;
+  background: rgba(59, 130, 246, 0.14);
+}
+
+/* New Enterprise Badge Colors */
+/* The 5-Level Enterprise Taxonomy Badges */
+.badge-direct {
+  background: rgba(34, 197, 94, 0.15); 
+  color: #4ade80; /* Green */
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.badge-inferred {
+  background: rgba(250, 204, 21, 0.15); 
+  color: #facc15; /* Yellow */
+  border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+.badge-extrapolation {
+  background: rgba(249, 115, 22, 0.15); 
+  color: #fb923c; /* Orange */
+  border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.badge-out-of-corpus {
+  background: rgba(148, 163, 184, 0.15); 
+  color: #cbd5e1; /* Slate/Gray */
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.badge-unsupported {
+  background: rgba(239, 68, 68, 0.15); 
+  color: #f87171; /* Red */
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.badge-inferred {
+  background: rgba(234, 179, 8, 0.15); /* Yellow/Orange tint */
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+.badge-unsupported {
+  background: rgba(239, 68, 68, 0.15); /* Red tint */
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
 .confidence-bar {
@@ -311,26 +365,59 @@ input {
   transition: width 0.45s ease;
 }
 
+/* Enhanced Source Audit Trail */
 .sources-box {
-  margin-top: 12px;
+  margin-top: 16px;
   padding-top: 10px;
   border-top: 1px solid var(--line);
-  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sources-box strong {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
   color: #cbd5e1;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
 .source-item {
-  display: block;
-  padding: 5px 0;
-  color: var(--muted);
-  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.source-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.source-doc {
+  color: #94a3b8;
+}
+
+.source-section {
+  color: #38bdf8;
+  font-family: monospace;
+}
+
+.source-snippet {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  font-style: italic;
+  line-height: 1.4;
+  border-left: 2px solid #475569;
+  padding-left: 8px;
 }
 
 .footer {

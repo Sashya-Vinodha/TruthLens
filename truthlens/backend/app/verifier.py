@@ -1,23 +1,51 @@
 import re
 from typing import Any, Dict, List
 import logging
-
 from .utils import extract_years, sentence_split, sentence_support_score
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
 
+# Load the pipeline ONCE globally so the server stays lightning-fast
+_NLI_PIPE = None
+
+def _get_nli_pipeline():
+    global _NLI_PIPE
+    if _NLI_PIPE is not None:
+        return _NLI_PIPE
+    try:
+        from transformers import pipeline
+        logger.info("Loading NLI model into memory...")
+        _NLI_PIPE = pipeline("text-classification", model="cross-encoder/nli-deberta-v3-small")
+        return _NLI_PIPE
+    except Exception as e:
+        logger.warning(f"Failed to load NLI model: {e}. Using fallback matching.")
+        return None
+
 class Verifier:
     def __init__(self):
         self.embed_model = None
-        self.nli_pipe = None
+        self.nli_pipe = _get_nli_pipeline()
 
     def _split_into_sentences(self, text: str) -> List[str]:
-        return sentence_split(text) or [text.strip()]
+        sents = sentence_split(text)
+        final_chunks = []
+        max_words = 200  
+        overlap = 40
+        
+        for sent in (sents or [text.strip()]):
+            words = sent.split()
+            if len(words) > max_words:
+                for i in range(0, len(words), max_words - overlap):
+                    chunk = " ".join(words[i : i + max_words])
+                    final_chunks.append(chunk)
+            else:
+                final_chunks.append(sent)
+                
+        return final_chunks
 
     def _best_doc_sentence(self, claim: str, doc_text: str):
         doc_sents = self._split_into_sentences(doc_text)
-
         best_sentence = doc_text.strip()
         best_score = 0.0
 
@@ -44,106 +72,119 @@ class Verifier:
         }
 
     def verify(self, generated_text: str, retrieved_docs: List[Any]) -> Dict[str, Any]:
-
-        # Normalize docs
         norm_docs = []
         for d in retrieved_docs:
             if isinstance(d, dict):
                 norm_docs.append({
                     "id": d.get("id"),
                     "text": d.get("text", ""),
-                    "title": d.get("title", d.get("text", "")[:50])
+                    "title": d.get("title", d.get("text", "")[:50]),
+                    "score": d.get("score", 0.0) # <--- Preserving the Search Score!
                 })
             else:
                 norm_docs.append({
                     "id": None,
                     "text": str(d),
-                    "title": str(d)[:50]
+                    "title": str(d)[:50],
+                    "score": 0.0
                 })
 
         if not generated_text or not generated_text.strip():
             return {"claims": [], "overall_support": 0.0}
 
+        # We still split the generated text into claims for granular reporting in the UI
         claims = sentence_split(generated_text)
         if not claims:
             claims = [generated_text.strip()]
 
         results = []
         total_score = 0.0
+        has_any_contradiction = False
+
+        # --- THE PATH 1 UPGRADE: MEGA-CONTEXT ---
+        # Combine all retrieved docs into one large context for DeBERTa to read at once
+        combined_context = " ".join([doc["text"] for doc in norm_docs])
 
         for claim in claims:
-
             normalized_claim = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\s]", " ", claim.lower())).strip()
-            if normalized_claim in {"no that is incorrect", "that is incorrect"}:
+            
+            # Allow conversational corrections to pass automatically
+            if normalized_claim in {"no that is incorrect", "that is incorrect", "actually", "not quite"}:
                 results.append({
-                    "text": claim,
-                    "cited_doc_idx": None,
-                    "cited_doc_id": None,
-                    "title": None,
-                    "best_doc_sentence": "",
-                    "sim": 1.0,
-                    "nli_label": "NEUTRAL",
-                    "nli_score": 1.0,
-                    "score": 1.0,
-                    "supported": True,
+                    "text": claim, "cited_doc_idx": None, "cited_doc_id": None, "title": None,
+                    "best_doc_sentence": "", "sim": 1.0, "nli_label": "ENTAILMENT", "nli_score": 1.0,
+                    "score": 1.0, "supported": True,
                 })
                 total_score += 1.0
                 continue
 
-            best_sim = 0.0
-            best_sent = ""
-            best_doc_idx = None
-            best_doc_id = None
-            best_title = None
-
+            # Handle abstentions
             if claim.lower() in {"not found", "i don't have enough information", "i do not have enough information"}:
                 results.append({
-                    "text": claim,
-                    "cited_doc_idx": None,
-                    "cited_doc_id": None,
-                    "title": None,
-                    "best_doc_sentence": "",
-                    "sim": 0.0,
-                    "nli_label": "NEUTRAL",
-                    "nli_score": 0.0,
-                    "score": 0.0,
-                    "supported": False,
+                    "text": claim, "cited_doc_idx": None, "cited_doc_id": None, "title": None,
+                    "best_doc_sentence": "", "sim": 0.0, "nli_label": "NEUTRAL", "nli_score": 0.0,
+                    "score": 0.0, "supported": False,
                 })
                 continue
 
-            # 🔍 Find best matching doc sentence
-            for i, doc in enumerate(norm_docs):
-                support = self._claim_supported(claim, doc["text"])
-                sent = support["best_sentence"]
-                sim = support["score"]
-                if sim > best_sim:
-                    best_sim = sim
-                    best_sent = sent
-                    best_doc_idx = i
-                    best_doc_id = doc.get("id")
-                    best_title = doc.get("title")
+            best_nli_label = "NEUTRAL"
+            best_nli_score = 0.0
+            supported = False
 
-            combined = min(1.0, best_sim)
-            supported = combined >= 0.55
-            best_nli_score = combined
-            best_nli_label = "ENTAILMENT" if supported else "NEUTRAL"
+            # Evaluate the claim against the ENTIRE context chunk
+            if self.nli_pipe and combined_context.strip():
+                try:
+                    # Pass the whole context as text, and the claim as text_pair
+                    nli_result = self.nli_pipe([{"text": combined_context, "text_pair": claim}], truncation=True, max_length=512)[0]
+                    best_nli_label = nli_result["label"].upper()
+                    best_nli_score = nli_result["score"]
+                    
+                    if best_nli_label == "CONTRADICTION":
+                        has_any_contradiction = True
+                        supported = False
+                    elif best_nli_label == "ENTAILMENT" and best_nli_score > 0.4:
+                        supported = True
+                    else:
+                        supported = False 
+                except Exception as e:
+                    logger.error(f"NLI run error: {e}")
+
+            final_score = 0.0 if best_nli_label == "CONTRADICTION" else best_nli_score
 
             results.append({
                 "text": claim,
-                "cited_doc_idx": best_doc_idx,
-                "cited_doc_id": best_doc_id,
-                "title": best_title,
-                "best_doc_sentence": best_sent,
-                "sim": round(best_sim, 4),
+                "cited_doc_idx": 0, 
+                "cited_doc_id": norm_docs[0].get("id") if norm_docs else None,
+                "title": norm_docs[0].get("title") if norm_docs else None,
+                "best_doc_sentence": "Combined Document Context",
+                "sim": 0.0, # Legacy compatibility
                 "nli_label": best_nli_label,
                 "nli_score": round(best_nli_score, 4),
-                "score": round(combined, 4),
+                "score": round(final_score, 4),
                 "supported": supported
             })
 
-            total_score += combined
+            total_score += final_score
 
-        overall_support = (total_score / len(results)) if results else 0.0
+        # --- THE FIX: Honest Confidence Math ---
+        
+        # 1. Calculate the Verifier Score (No Chatty Tax)
+        factual_results = [r for r in results if len(r.get("text", "").split()) > 7]
+        if not factual_results:
+            factual_results = results 
+            
+        factual_total = sum(r["score"] for r in factual_results)
+        verifier_score = (factual_total / len(factual_results)) if factual_results else 0.0
+
+        # 2. Calculate the Retrieval Score (How good were the PDFs we found?)
+        avg_retrieval_score = sum(doc.get("score", 0.0) for doc in norm_docs) / len(norm_docs) if norm_docs else 0.0
+
+        # 3. True System Confidence = 60% Fact-Check + 40% Search Quality
+        overall_support = (verifier_score * 0.6) + (avg_retrieval_score * 0.4)
+        
+        # Immediate kill switch for lies
+        if has_any_contradiction:
+            overall_support = 0.0
 
         return {
             "claims": results,
