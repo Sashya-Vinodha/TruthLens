@@ -10,6 +10,18 @@ TruthLens is an advanced RAG Guardrail and factual verification system designed 
 
 ---
 
+## 🎯 Domain Scope & Evaluation Corpus
+
+TruthLens is intentionally designed as a domain-specific Retrieval-Augmented Verification system rather than a general-purpose chatbot. The current evaluation corpus focuses on AI governance, trustworthiness, risk management, and regulatory compliance, including:
+
+* NIST AI Risk Management Framework (AI RMF 1.0)
+* NIST Generative AI Profile (AI 600-1)
+* Supporting AI governance and regulatory reference documents
+
+**This domain-focused design enables stronger retrieval precision, stricter verification, and reduced hallucination risk compared to unrestricted open-domain systems.**
+
+---
+
 ## 🏗️ Core Architectural Features
 
 ### 1. Natural Language Inference (NLI) Verifier Engine
@@ -71,18 +83,82 @@ graph TD
 
 ---
 
+## 🔍 Example Queries
+
+* **Direct Retrieval:** *"What are the seven trustworthiness characteristics of AI systems?"*
+* **Cross-Document Reasoning:** *"If an AI system is secure but prone to confabulation, would NIST consider it trustworthy?"*
+* **Risk Analysis:** *"How does NIST define data poisoning?"*
+* **Corpus Boundary Enforcement:** *"What are the SEC compliance regulations for using AI in cryptocurrency trading?"*
+* **Hallucination Detection:** *"According to the documents, is it acceptable for an AI system to bypass safety protocols to improve performance?"*
+
+---
+
 ## 🚀 Rapid Verification Benchmarks (The UI Test)
 
 The system routing logic handles three distinct epistemic states:
 
 ### Test A: Direct & Synthesized Knowledge (NIST Frameworks)
-* **Query:** *"What are the seven trustworthiness characteristics of AI systems?"*
 * **System Action:** Retrieves documentation, evaluates alignment score thresholds, and outputs a `🟢 Safe` + `🔗 Inferred From Sources` or `🎯 Direct Evidence` token payload.
 
 ### Test B: Strict Boundary Enforcement (Off-Topic Mitigation)
-* **Query:** *"What are the SEC compliance regulations for using AI in cryptocurrency trading?"*
 * **System Action:** Intercepts out-of-corpus parameters, flags `final_abstain = True`, and updates the response layout to `⚪ Out Of Corpus` with clean audit-trail dismissal.
 
 ### Test C: Hallucination & Contradiction Blocking
-* **Query:** *"According to the documents, is it acceptable for an AI system to bypass safety protocols to improve performance?"*
-* **System Action:** NLI Verifier extracts claims, detects a logical `CONTRADICTION` against the retrieved NIST guidelines, triggers the secure fallback protocol, and renders a `🛑 Blocked (Hallucination Detected)` state.
+* **System Action:** NLI Verifier evaluates the generated response against retrieved evidence, detects a logical `CONTRADICTION` against the retrieved NIST guidelines, triggers the secure fallback protocol, and renders a `🛑 Blocked (Hallucination Detected)` state.
+
+---
+
+## 🔮 Current Limitations & Future Work
+
+Current verification is performed at the generated-response level. Future iterations will introduce claim-level verification, where individual factual statements are extracted and independently validated against retrieved evidence.
+
+**Additional roadmap items include:**
+* Claim-level NLI verification
+* Evidence-to-source page mapping
+* Metadata-aware retrieval
+* Multi-tenant access control for enterprise deployments
+* Confidence stratification between direct evidence and inferred reasoning
+
+---
+
+## 💻 Developer Onboarding & Local Setup
+
+TruthLens is engineered to be fully cross-platform (macOS/Linux/Windows). Pathing is handled dynamically via Python's `pathlib` to ensure smooth execution across diverse OS environments.
+
+### Option A: The Zero-Config Docker Setup (Recommended)
+For immediate, environment-agnostic deployment, ensure Docker Desktop is running and execute:
+```bash
+docker-compose up --build
+```
+*(The backend will be available at `localhost:8000` and the frontend at `localhost:3000`.)*
+
+### Option B: Manual Local Setup
+
+**1. Initialize the AI Backend (FastAPI)**
+```bash
+cd truthlens/backend
+```
+
+**Create and activate the virtual environment:**
+* **Mac/Linux:** `python3 -m venv venv && source venv/bin/activate`
+* **Windows:** `python -m venv venv && .\venv\Scripts\activate`
+*(Windows Note: If PowerShell restricts execution, run `Set-ExecutionPolicy Unrestricted -Scope CurrentUser` as Administrator).*
+
+**Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+*(Windows FAISS Note: If `faiss-cpu` fails to compile via pip, use Conda: `conda install -c pytorch faiss-cpu`).*
+
+**Start the API:**
+```bash
+uvicorn app.main:app --reload
+```
+
+**2. Initialize the Audit UI (React)**
+Open a second terminal window:
+```bash
+cd truthlens/frontend
+npm install
+npm run dev
+```
