@@ -1,36 +1,52 @@
-# Python
+# =========================
+# TruthLens Master .gitignore
+# =========================
+
+# Python & Build Artifacts
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
 *.pyd
 .Python
-.venv/
-venv/
-ENV/
 build/
 dist/
 .eggs/
 *.egg-info/
 pip-wheel-metadata/
 
-# VSCode
-.vscode/
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
 
-# Mac
-.DS_Store
+# Secrets & Keys (CRITICAL)
+.env
+*.local
+*.pem
+*.key
 
-# data / models (do not commit)
+# AI Models & Large Binaries
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+*.tar.gz
+
+# Local TruthLens Database & Indices
 truthlens/backend/data/*.pkl
 truthlens/backend/data/faiss.index
-truthlens/backend/data/*.safetensors
-truthlens/backend/data/*.bin
+*.sqlite3
 
-# local config
-*.local
-.env
-
-# node modules (if frontend uses node)
+# Frontend / Node
 node_modules/
+npm-debug.log*
 
-# logs
+# Testing & Logs
+.pytest_cache/
 *.log
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
