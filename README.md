@@ -1,162 +1,248 @@
 # TruthLens: Enterprise-Grade Retrieval-Augmented Verification (RAG+V)
 
-TruthLens is an advanced RAG Guardrail and factual verification system designed to reduce hallucinations and enforce strict epistemic boundaries in Large Language Model (LLM) pipelines. 
+TruthLens is an advanced Retrieval-Augmented Verification (RAG+V) system designed to reduce hallucinations and enforce strict epistemic boundaries in Large Language Model (LLM) pipelines.
 
-**TruthLens was developed to address a critical limitation of modern LLM systems: the tendency to generate confident answers even when supporting evidence is weak, missing, or entirely outside the system's knowledge boundary.**
+TruthLens was developed to address a critical limitation of modern LLM systems: the tendency to generate confident answers even when supporting evidence is weak, missing, or entirely outside the system's knowledge boundary.
 
-**Unlike standard RAG architectures that blindly trust the generator layer, TruthLens treats generated answers as unverified hypotheses.** It evaluates generations against retrieved documents using an independent **Natural Language Inference (NLI)** verification engine before passing responses to the application layer.
+Unlike standard Retrieval-Augmented Generation (RAG) architectures that trust the generator layer, TruthLens treats generated answers as unverified hypotheses. Responses are evaluated against retrieved evidence using an independent Natural Language Inference (NLI) verification engine before being returned to the user.
+
+---
+
+## 🎯 Engineering Motivation
+
+Modern LLM applications are increasingly deployed in domains where incorrect information can have serious consequences, including:
+
+- Regulatory compliance
+- Governance and risk management
+- Healthcare
+- Legal research
+- Enterprise knowledge systems
+
+While Retrieval-Augmented Generation (RAG) improves factual grounding through document retrieval, most implementations still trust the generated response without independently validating it.
+
+TruthLens explores a Retrieval-Augmented Verification (RAG+V) architecture, where generation is followed by an evidence-verification stage that evaluates whether the response is actually supported by retrieved documents.
 
 ---
 
 ## 🎯 Domain Scope & Evaluation Corpus
 
-TruthLens is intentionally designed as a domain-specific Retrieval-Augmented Verification system rather than a general-purpose chatbot. The current evaluation corpus focuses on AI governance, trustworthiness, risk management, and regulatory compliance, including:
+TruthLens is intentionally designed as a domain-specific verification system rather than a general-purpose chatbot.
 
-* NIST AI Risk Management Framework (AI RMF 1.0)
-* NIST Generative AI Profile (AI 600-1)
-* Supporting AI governance and regulatory reference documents
+The current evaluation corpus focuses on AI governance, trustworthiness, risk management, and regulatory compliance, including:
 
-**This domain-focused design enables stronger retrieval precision, stricter verification, and reduced hallucination risk compared to unrestricted open-domain systems.**
+- NIST AI Risk Management Framework (AI RMF 1.0)
+- NIST Generative AI Profile (AI 600-1)
+- Supporting AI governance and regulatory reference documents
+
+This focused design improves retrieval precision, reduces semantic drift, and lowers hallucination risk compared to unrestricted open-domain systems.
 
 ---
 
 ## 🏗️ Core Architectural Features
 
-### 1. Natural Language Inference (NLI) Verifier Engine
-* **Semantic Cross-Examination:** Evaluates the LLM's generated response against retrieved reference documents.
-* **Cross-Encoder Alignment:** Uses an external Cross-Encoder NLI model to assign classification scores for `ENTAILMENT`, `NEUTRAL`, and `CONTRADICTION` against the source text.
+### 1. Natural Language Inference (NLI) Verification Engine
 
-### 2. Four-Level Stratified Evidence Taxonomy
-TruthLens moves away from simplistic binary "correct/incorrect" flags, implementing an enterprise-grade taxonomy that classifies the exact nature of the response generation:
-* 🎯 **Direct Evidence:** Explicit, verbatim, or near-verbatim textual backing within the dataset.
-* 🔗 **Inferred From Sources:** The answer is synthetically accurate, representing a valid logical abstraction or cross-document reasoning.
-* ⚠️ **Contradicted / Unsupported:** Conflicting facts or unbacked claims detected; automatically triggers a secure system fallback.
-* ⚪ **Out Of Corpus:** The engine detects that the query targets concepts completely outside the active knowledge domain, triggering a graceful refusal.
+- Semantic Cross-Examination: Evaluates generated responses against retrieved evidence.
+- Cross-Encoder Alignment: Uses an independent NLI model to classify relationships between generated content and source documents as:
+  - ENTAILMENT
+  - NEUTRAL
+  - CONTRADICTION
+
+### 2. Four-Level Evidence Taxonomy
+
+TruthLens moves beyond simplistic "correct/incorrect" classifications by implementing a structured evidence framework:
+
+#### 🎯 Direct Evidence
+Explicit textual support exists within the retrieved corpus.
+
+#### 🔗 Inferred From Sources
+The response represents valid reasoning or synthesis derived from retrieved evidence.
+
+#### ⚠️ Contradicted / Unsupported
+Evidence conflicts with or fails to support the generated response.
+
+#### ⚪ Out Of Corpus
+The query falls outside the active knowledge domain and triggers a controlled refusal.
 
 ### 3. Epistemic Humility (Corpus Boundary Enforcement)
-* **Corpus Boundary Enforcement:** Prevents out-of-domain hallucinations through semantic topic matching and retrieval boundary checks. 
-* **Automatic Fallback:** Automatically abstains when user queries fall outside the active knowledge domain, dynamically dropping irrelevant source tracking.
+
+- Semantic topic matching
+- Retrieval boundary validation
+- Controlled abstention behavior
+
+Rather than generating speculative answers, TruthLens explicitly acknowledges when information falls outside the available corpus.
 
 ### 4. Deterministic Audit Trail UI
-* A responsive, scannable React frontend that visualizes safety badges (`Safe (Boundary Enforced)`, `Safe (No Contradictions)`, `Blocked`).
-* Renders exact reference documentation snippets to ensure human-in-the-loop auditability.
+
+The React-based audit interface provides:
+
+- Safety status indicators
+- Evidence classifications
+- Source transparency
+- Human-in-the-loop verification support
 
 ---
 
-### Architecture Flow
+## 🧩 Architecture Flow
 
-```mermaid
-graph TD
-    A[User Query] --> B(Retriever: FAISS + BGE Embeddings)
-    B --> C(Cross-Encoder Reranker)
-    C --> D[Top-K Evidence Chunks]
-    D --> E(Gemini API Generator)
-    E --> F[Generated Response]
-    F --> G{NLI Verifier Engine}
-    G -->|CONTRADICTION| H[🛑 Blocked]
-    G -->|OUT OF CORPUS| I[⚪ Abstain / Refuse]
-    G -->|SUPPORTED| J[🟢 Return Validated Answer]
-    H --> K((React Audit UI))
-    I --> K
-    J --> K
-```
+mermaid graph TD     A[User Query] --> B(Retriever: FAISS + BGE Embeddings)     B --> C(Cross-Encoder Reranker)     C --> D[Top-K Evidence Chunks]     D --> E(Gemini API Generator)     E --> F[Generated Response]     F --> G{NLI Verifier Engine}     G -->|CONTRADICTION| H[🛑 Blocked]     G -->|OUT OF CORPUS| I[⚪ Abstain / Refuse]     G -->|SUPPORTED| J[🟢 Return Validated Answer]     H --> K((React Audit UI))     I --> K     J --> K 
 
-## 🛠️ Tech Stack
+---
 
-**Backend & Verification Engine:**
-* FastAPI (Python)
-* FAISS Vector Search
-* SentenceTransformers & BGE-Large Embeddings
-* Cross-Encoder Reranking
-* NLI Verification Layer
+## 📸 System Demonstration
 
-**Frontend UI:**
-* React (JavaScript) & TailwindCSS
-* Markdown Rendering
-* Evidence Classification UI
+### 🎯 Direct Evidence
+Example of a response directly supported by retrieved evidence.
 
-**LLM Core:**
-* Gemini API
-* Retrieval-Augmented Generation (RAG) Pipeline
+> Add screenshot here
+
+### 🔗 Inferred From Sources
+Example of multi-document reasoning and synthesized knowledge.
+
+> Add screenshot here
+
+### ⚪ Out Of Corpus
+Example demonstrating corpus-boundary enforcement and graceful refusal.
+
+> Add screenshot here
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend & Verification Engine
+
+- FastAPI
+- Python
+- FAISS Vector Search
+- SentenceTransformers
+- BGE-Large Embeddings
+- Cross-Encoder Reranking
+- NLI Verification Layer
+
+### Frontend
+
+- React
+- TailwindCSS
+- Markdown Rendering
+- Evidence Classification UI
+
+### LLM Layer
+
+- Gemini API
+- Retrieval-Augmented Generation (RAG)
 
 ---
 
 ## 🔍 Example Queries
 
-* **Direct Retrieval:** *"What are the seven trustworthiness characteristics of AI systems?"*
-* **Cross-Document Reasoning:** *"If an AI system is secure but prone to confabulation, would NIST consider it trustworthy?"*
-* **Risk Analysis:** *"How does NIST define data poisoning?"*
-* **Corpus Boundary Enforcement:** *"What are the SEC compliance regulations for using AI in cryptocurrency trading?"*
-* **Hallucination Detection:** *"According to the documents, is it acceptable for an AI system to bypass safety protocols to improve performance?"*
+### Direct Retrieval
+> What are the seven trustworthiness characteristics of AI systems?
+
+### Cross-Document Reasoning
+> If an AI system is secure but prone to confabulation, would NIST consider it trustworthy?
+
+### Risk Analysis
+> How does NIST define data poisoning?
+
+### Corpus Boundary Enforcement
+> What are the SEC compliance regulations for using AI in cryptocurrency trading?
+
+### Hallucination Detection
+> According to the documents, is it acceptable for an AI system to bypass safety protocols to improve performance?
 
 ---
 
-## 🚀 Rapid Verification Benchmarks (The UI Test)
+## 🚀 Validation Scenarios
 
-The system routing logic handles three distinct epistemic states:
+### Test A: Direct & Synthesized Knowledge
 
-### Test A: Direct & Synthesized Knowledge (NIST Frameworks)
-* **System Action:** Retrieves documentation, evaluates alignment score thresholds, and outputs a `🟢 Safe` + `🔗 Inferred From Sources` or `🎯 Direct Evidence` token payload.
+Expected Outcome
 
-### Test B: Strict Boundary Enforcement (Off-Topic Mitigation)
-* **System Action:** Intercepts out-of-corpus parameters, flags `final_abstain = True`, and updates the response layout to `⚪ Out Of Corpus` with clean audit-trail dismissal.
+- Evidence retrieved
+- Response generated
+- Verification completed
+- Direct Evidence or Inferred From Sources classification
 
-### Test C: Hallucination & Contradiction Blocking
-* **System Action:** NLI Verifier evaluates the generated response against retrieved evidence, detects a logical `CONTRADICTION` against the retrieved NIST guidelines, triggers the secure fallback protocol, and renders a `🛑 Blocked (Hallucination Detected)` state.
+### Test B: Corpus Boundary Enforcement
+
+Expected Outcome
+
+- Corpus mismatch detected
+- Retrieval boundary enforced
+- Controlled abstention returned
+
+### Test C: Contradiction Handling
+
+Expected Outcome
+
+- Contradiction signals detected
+- Response blocked
+- Hallucination mitigation triggered
 
 ---
 
 ## 🔮 Current Limitations & Future Work
 
-Current verification is performed at the generated-response level. Future iterations will introduce claim-level verification, where individual factual statements are extracted and independently validated against retrieved evidence.
+Current verification is performed at the generated-response level.
 
-**Additional roadmap items include:**
-* Claim-level NLI verification
-* Evidence-to-source page mapping
-* Metadata-aware retrieval
-* Multi-tenant access control for enterprise deployments
-* Confidence stratification between direct evidence and inferred reasoning
+Future iterations will introduce claim-level verification, where generated responses are decomposed into individual factual claims and independently validated against retrieved evidence.
+
+### Planned Enhancements
+
+- Claim-level NLI verification
+- Evidence-to-source page mapping
+- Metadata-aware retrieval
+- Multi-tenant access control
+- Confidence stratification
+- Enhanced multi-document reasoning
 
 ---
 
 ## 💻 Developer Onboarding & Local Setup
 
-TruthLens is engineered to be fully cross-platform (macOS/Linux/Windows). Pathing is handled dynamically via Python's `pathlib` to ensure smooth execution across diverse OS environments.
+TruthLens is engineered to be cross-platform (macOS, Linux, and Windows). Pathing is handled dynamically using Python's pathlib.
 
-### Option A: The Zero-Config Docker Setup (Recommended)
-For immediate, environment-agnostic deployment, ensure Docker Desktop is running and execute:
+### Option A: Docker Deployment (Recommended)
+
+bash docker-compose up --build 
+
+Backend:
+
+text http://localhost:8000 
+
+Frontend:
+
+text http://localhost:3000 
+
+### Option B: Manual Setup
+
+#### Backend
+
+bash cd backend 
+
+Create and activate a virtual environment:
+
+macOS / Linux
+bash python3 -m venv venv source venv/bin/activate 
+
+Windows
+bash python -m venv venv .\venv\Scripts\activate 
+
+Install dependencies:
+
+bash pip install -r requirements.txt 
+
+Run the API:
+
+bash uvicorn app.main:app --reload 
+
+#### Frontend
+
+Open a second terminal:
+
 ```bash
-docker-compose up --build
-```
-*(The backend will be available at `localhost:8000` and the frontend at `localhost:3000`.)*
-
-### Option B: Manual Local Setup
-
-**1. Initialize the AI Backend (FastAPI)**
-```bash
-cd truthlens/backend
-```
-
-**Create and activate the virtual environment:**
-* **Mac/Linux:** `python3 -m venv venv && source venv/bin/activate`
-* **Windows:** `python -m venv venv && .\venv\Scripts\activate`
-*(Windows Note: If PowerShell restricts execution, run `Set-ExecutionPolicy Unrestricted -Scope CurrentUser` as Administrator).*
-
-**Install dependencies:**
-```bash
-pip install -r requirements.txt
-```
-*(Windows FAISS Note: If `faiss-cpu` fails to compile via pip, use Conda: `conda install -c pytorch faiss-cpu`).*
-
-**Start the API:**
-```bash
-uvicorn app.main:app --reload
-```
-
-**2. Initialize the Audit UI (React)**
-Open a second terminal window:
-```bash
-cd truthlens/frontend
+cd frontend
 npm install
 npm run dev
-```
+`
