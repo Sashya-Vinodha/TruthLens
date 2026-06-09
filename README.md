@@ -69,6 +69,8 @@ The React-based audit interface provides:
 
 ## 🧩 Architecture Flow
 
+## 🧩 Architecture Flow
+
 ```mermaid
 graph TD
     A[User Query] --> B(Retriever: FAISS + BGE Embeddings)
@@ -83,7 +85,6 @@ graph TD
     H --> K((React Audit UI))
     I --> K
     J --> K
-` ` `
 
 ---
 
