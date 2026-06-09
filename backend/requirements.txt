@@ -5,6 +5,8 @@ transformers
 torch
 numpy
 google-generativeai
+groq
 pydantic
 faiss-cpu   # optional; if this fails, see FAISS note below
 rank-bm25
+python-dotenv

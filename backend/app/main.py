@@ -55,10 +55,10 @@ def abstain_response(question: str, retrieved_docs: list[dict] | None = None) ->
         "answer": "I couldn't find relevant information in the dataset. This query appears to be outside the scope of the provided governance documents.",
         "confidence": 0.0,
         "abstain": True,
-        "safety_status": "Safe (Boundary Enforced)", # Tells React to render the Green safe badge
-        "evidence_label": "Out Of Corpus",         # Tells React to render the Gray corpus badge
+        "safety_status": "Safe (Out of Scope)", # <-- UPDATED
+        "evidence_label": "Out Of Corpus",
         "verifier": {"claims": [], "overall_support": 0.0},
-        "retrieved_docs": []                       # Empties the array so the Audit Trail hides!
+        "retrieved_docs": []
     }
 
 @app.get("/health")
@@ -167,8 +167,10 @@ def query(req: QueryRequest) -> Dict[str, Any]:
     # 4. Categorize Safety and Evidence
     if is_out_of_corpus:
         final_abstain = True
-        safety_status = "Safe (Boundary Enforced)"
+        safety_status = "Safe" 
         evidence_label = "Out Of Corpus"
+        retrieved_docs = []    
+        final_answer = "I couldn't find relevant information in the dataset. This query appears to be outside the scope of the provided governance documents." # <-- BRUTALLY OVERWRITE THE LLM    
 
     elif has_contradiction:
         logger.warning("🛑 VERIFIER BLOCKED: Contradiction detected.")
@@ -194,7 +196,7 @@ def query(req: QueryRequest) -> Dict[str, Any]:
     return {
         "question": question,
         "answer": final_answer,
-        "confidence": round(final_confidence, 4), # Kept for debugging
+        "confidence": round(final_confidence, 4), 
         "abstain": final_abstain,
         "safety_status": safety_status,
         "evidence_label": evidence_label,
