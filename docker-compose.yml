@@ -1,11 +1,13 @@
 version: '3.8'
 services:
-  web:
-    build: .
+  backend:
+    build: 
+      context: ./backend    
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./backend:/app      
     environment:
       - PORT=8000
-    command: uvicorn truthlens.backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

@@ -1,273 +1,358 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import "./App.css";
-import ReactMarkdown from 'react-markdown';
 
 const API_BASE =
   typeof window !== "undefined" && window.location.port === "8000"
     ? window.location.origin
     : "http://127.0.0.1:8000";
 
-function ThinkingWave() {
-  return (
-    <div className="thinking-wave" aria-label="Thinking">
-      <span />
-      <span />
-      <span />
-    </div>
-  );
-}
+const LensMark = ({ small = false }) => (
+  <div className={small ? "lens-mark lens-mark-small" : "lens-mark"}>
+    <svg viewBox="0 0 100 100" fill="none">
+      <rect width="100" height="100" rx="24" fill="currentColor" />
+      <circle cx="48" cy="47" r="23" stroke="white" strokeWidth="7" />
+      <path d="M65 65L79 79" stroke="white" strokeWidth="7" strokeLinecap="round" />
+      <path d="M38 49L47 58L61 40" stroke="white" strokeWidth="7" strokeLinecap="round" />
+    </svg>
+  </div>
+);
 
-function LensMark({ small = false }) {
-  return (
-    <div className={small ? "lens-mark lens-mark-small" : "lens-mark"}>
-      <svg viewBox="0 0 100 100" role="img" aria-label="TruthLens">
-        <rect width="100" height="100" rx="24" fill="currentColor" />
-        <circle cx="48" cy="47" r="23" fill="none" stroke="white" strokeWidth="7" />
-        <path d="M65 65L79 79" stroke="white" strokeWidth="7" strokeLinecap="round" />
-        <path
-          d="M38 49L47 58L61 40"
-          fill="none"
-          stroke="white"
-          strokeWidth="7"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  );
-}
-
-function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [k, setK] = useState(3);
-  const [loading, setLoading] = useState(false);
+export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  
   const [messages, setMessages] = useState([
     {
-      id: "welcome",
-      type: "ai",
-      answer: "Hello. I am ready to verify facts for you.",
-      abstain: false,
-      retrieved_docs: [],
-      timestamp: "Just now",
+      role: "ai",
+      content: "Hello. I am ready to verify facts for you.",
+      safety_status: null,
+      evidence_label: null,
+      sources: [],
     },
   ]);
 
+  const [input, setInput] = useState("");
+  const [docsCount, setDocsCount] = useState(3);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const messagesEndRef = useRef(null);
+
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 1200);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, isLoading]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2500);
+
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const chat = document.querySelector(".chat-area");
-    if (chat) chat.scrollTop = chat.scrollHeight;
-  }, [messages, loading]);
+  const handleSend = async (e) => {
+    if (e) e.preventDefault();
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+    if (!input.trim() || isLoading) return;
 
-    const text = question.trim();
-    if (!text || loading) return;
+    const question = input.trim();
 
-    setMessages((current) => [
-      ...current,
-      {
-        id: `user-${Date.now()}`,
-        type: "user",
-        answer: text,
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      },
-    ]);
-    setQuestion("");
-    setLoading(true);
+    const userMessage = {
+      role: "user",
+      content: question,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${API_BASE}/query`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: text, k: Number(k) || 3 }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question,
+          k: Number(docsCount),
+        }),
       });
 
       if (!response.ok) {
-        const backendText = await response.text();
-        throw new Error(`Backend error (${response.status}): ${backendText || response.statusText}`);
+        throw new Error(`Backend returned ${response.status}`);
       }
 
       const data = await response.json();
-      setMessages((current) => [
-        ...current,
+
+      const assistantMessage = {
+        role: "ai",
+        content:
+          data.answer ||
+          data.response ||
+          "No response generated.",
+
+        safety_status: data.safety_status,
+        evidence_label: data.evidence_label,
+        confidence: data.confidence,
+        sources: data.retrieved_docs || [],
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (err) {
+      console.error(err);
+
+      setMessages((prev) => [
+        ...prev,
         {
-          id: `ai-${Date.now()}`,
-          type: "ai",
-          answer: data.answer,
-          safety_status: data.safety_status,     
-          evidence_label: data.evidence_label,   
-          abstain: data.abstain,
-          retrieved_docs: data.retrieved_docs || [],
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
-    } catch (error) {
-      setMessages((current) => [
-        ...current,
-        {
-          id: `error-${Date.now()}`,
-          type: "ai",
-          answer: `Error: ${error.message}`,
-          safety_status: "Error",
-          abstain: true,
-          retrieved_docs: [],
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          role: "ai",
+          content:
+            "Unable to connect to the TruthLens backend. Verify that FastAPI is running and reachable.",
+          safety_status: "Blocked",
+          evidence_label: "Contradicted / Unsupported",
+          sources: [],
         },
       ]);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }
+  };
 
-  if (!isLoaded) {
+  const renderSafetyBadge = (status) => {
+    if (!status) return null;
+
+    if (status.includes("Blocked")) {
+      return (
+        <span className="badge badge-blocked">
+          🛑 {status}
+        </span>
+      );
+    }
+
+    if (status.includes("Boundary")) {
+      return (
+        <span className="badge badge-safe">
+          🛡️ Safe (Abstain)
+        </span>
+      );
+    }
+
     return (
-      <main className="entry-screen">
-        <div className="entry-lens" aria-hidden="true">
-          <span>🔍</span>
+      <span className="badge badge-safe">
+        🟢 {status}
+      </span>
+    );
+  };
+
+  const renderEvidenceBadge = (label) => {
+    if (!label) return null;
+
+    switch (label) {
+      case "Direct Evidence":
+        return (
+          <span className="badge badge-direct">
+            🎯 Direct Evidence
+          </span>
+        );
+
+      case "Inferred From Sources":
+        return (
+          <span className="badge badge-inferred">
+            🔗 Inferred From Sources
+          </span>
+        );
+
+      case "Out Of Corpus":
+        return (
+          <span className="badge badge-out-of-corpus">
+            ⚪ Out Of Corpus
+          </span>
+        );
+
+      default:
+        return (
+          <span className="badge badge-unsupported">
+            ⚠️ Contradicted / Unsupported
+          </span>
+        );
+    }
+  };
+
+  if (showSplash) {
+    return (
+      <div className="entry-screen">
+        <div className="entry-lens">
+          <span>🛡️</span>
         </div>
         <h1>TruthLens</h1>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="app-shell">
+    <div className="app-shell">
       <header className="header">
-        <LensMark />
+        <LensMark small />
         <div className="header-info">
           <h1>TruthLens AI</h1>
           <p>
             <span className="status-dot" />
-            Online | Fact Verification
+            Online | Retrieval-Augmented Verification
           </p>
         </div>
       </header>
 
-      <div className="chat-area">
-        {messages.map((message) => {
-          const isAi = message.type === "ai";
+      <main className="chat-area">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message-row ${
+              msg.role === "user" ? "user-row" : "ai-row"
+            } fade-up`}
+          >
+            {msg.role === "ai" && <LensMark small />}
 
-          return (
             <div
-              className={`message-row fade-up ${isAi ? "ai-row" : "user-row"}`}
-              key={message.id}
+              className={`bubble ${
+                msg.role === "user"
+                  ? "user-bubble"
+                  : "ai-bubble"
+              }`}
             >
-              {isAi && <LensMark small />}
-              <div
-                className={
-                  isAi
-                    ? `bubble ai-bubble ai-message ${!message.abstain && message.id !== 'welcome' ? "verified" : ""}`
-                    : "bubble user-bubble"
-                }
-              >
-                  <div className="markdown-body">
-                    <ReactMarkdown>{message.answer}</ReactMarkdown>
-                  </div>
+              {msg.role === "ai" ? (
+                <ReactMarkdown>
+                  {msg.content}
+                </ReactMarkdown>
+              ) : (
+                <p style={{ margin: 0 }}>
+                  {msg.content}
+                </p>
+              )}
 
-                {/* THE NEW DUAL-BADGE RENDER BLOCK */}
-                {isAi && message.safety_status && message.id !== 'welcome' && (
+              {msg.timestamp && (
+                <span className="timestamp">
+                  {msg.timestamp}
+                </span>
+              )}
+
+              {msg.role === "ai" &&
+                (msg.safety_status ||
+                  msg.evidence_label) && (
                   <div className="result-row">
-                    <span className={message.abstain ? "badge badge-blocked" : "badge badge-safe"}>
-                      {message.abstain ? "🛑 " : "🟢 "}{message.safety_status}
-                    </span>
-                    
-                    {message.evidence_label && (
-                      <span className={
-                        message.evidence_label === "Direct Evidence" ? "badge badge-direct" : 
-                        message.evidence_label === "Inferred From Sources" ? "badge badge-inferred" : 
-                        message.evidence_label === "Domain Extrapolation" ? "badge badge-extrapolation" :
-                        message.evidence_label === "Out Of Corpus" ? "badge badge-out-of-corpus" :
-                        "badge badge-unsupported"
-                      }>
-                        {message.evidence_label === "Direct Evidence" ? "🎯 Direct Evidence" : 
-                          message.evidence_label === "Inferred From Sources" ? "🔗 Inferred From Sources" : 
-                          message.evidence_label === "Domain Extrapolation" ? "⚖️ Domain Extrapolation" : 
-                          message.evidence_label === "Out Of Corpus" ? "⚪ Out Of Corpus" : 
-                          "⚠️ Contradicted / Unsupported"}
-                      </span>
+                    {renderSafetyBadge(
+                      msg.safety_status
+                    )}
+                    {renderEvidenceBadge(
+                      msg.evidence_label
                     )}
                   </div>
                 )}
 
-                {/* THE NEW SOURCE AUDIT TRAIL BLOCK */}
-                {isAi && message.retrieved_docs?.length > 0 && (
-                  <div className="sources-box">
-                    <strong>Audit Trail:</strong>
-                    {message.retrieved_docs.map((doc, index) => (
-                      <div className="source-item" key={`doc-${index}`}>
+              {msg.sources?.length > 0 && (
+                <div className="sources-box">
+                  <strong>
+                    Evidence Audit Trail
+                  </strong>
+
+                  {msg.sources.map(
+                    (source, sourceIndex) => (
+                      <div
+                        key={sourceIndex}
+                        className="source-item"
+                      >
                         <div className="source-header">
-                          <span className="source-doc">📄 Source Document</span>
-                          <span className="source-section">{doc.title || "Untitled Section"}</span>
+                          <span className="source-doc">
+                            📄{" "}
+                            {source.title ||
+                              "Source Document"}
+                          </span>
                         </div>
-                        {doc.text && (
-                          <div className="source-snippet">
-                            "{doc.text.substring(0, 140)}..."
-                          </div>
-                        )}
+
+                        <div className="source-snippet">
+                          "
+                          {source.text?.slice(
+                            0,
+                            320
+                          )}
+                          ..."
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                <span className="timestamp">{message.timestamp}</span>
-              </div>
+                    )
+                  )}
+                </div>
+              )}
             </div>
-          );
-        })}
+          </div>
+        ))}
 
-        {loading && (
-          <div className="message-row fade-up ai-row">
+        {isLoading && (
+          <div className="message-row ai-row fade-up">
             <LensMark small />
-            <div className="bubble ai-bubble ai-message">
-              <ThinkingWave />
+
+            <div className="bubble ai-bubble">
+              <div className="thinking-wave">
+                <span />
+                <span />
+                <span />
+              </div>
             </div>
           </div>
         )}
-      </div>
 
-      <form className="footer" onSubmit={handleSubmit}>
-        <label className="docs-pill" title="Number of documents">
-          <span>Docs</span>
+        <div ref={messagesEndRef} />
+      </main>
+
+      <footer className="footer">
+        <div className="docs-pill">
+          Docs
+
           <input
-            max="5"
-            min="1"
-            onChange={(event) => setK(event.target.value)}
             type="number"
-            value={k}
+            min="1"
+            max="10"
+            value={docsCount}
+            onChange={(e) =>
+              setDocsCount(Number(e.target.value))
+            }
           />
-        </label>
-        <label className="input-pill">
+        </div>
+
+        <form
+          className="input-pill"
+          onSubmit={handleSend}
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <input
-            autoComplete="off"
-            onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Ask TruthLens to verify a claim..."
             type="text"
-            value={question}
+            value={input}
+            disabled={isLoading}
+            placeholder="Ask TruthLens to verify a claim..."
+            onChange={(e) =>
+              setInput(e.target.value)
+            }
           />
-        </label>
-        <button className="send-btn" disabled={loading} type="submit" aria-label="Send question">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
+        </form>
+
+        <button
+          type="submit"
+          onClick={handleSend}
+          className="send-btn"
+          disabled={
+            isLoading || !input.trim()
+          }
+        >
+          <svg viewBox="0 0 24 24">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
           </svg>
         </button>
-      </form>
-    </main>
+      </footer>
+    </div>
   );
 }
-
-export default App;
