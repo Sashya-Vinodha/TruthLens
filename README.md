@@ -73,12 +73,12 @@ The React-based audit interface provides:
 
 ```mermaid
 graph TD
-    A[User Query] --> B(Retriever: FAISS + BGE Embeddings)
+    A[User Query] --> B(Hybrid Retriever: Dense + Sparse BM25)
     B --> C(Cross-Encoder Reranker)
     C --> D[Top-K Evidence Chunks]
-    D --> E(Groq API Generator)
+    D --> E(Groq API: Llama-3.3-70b)
     E --> F[Generated Response]
-    F --> G{NLI Verifier Engine}
+    F --> G{DeBERTa-v3 NLI Verifier Engine}
     G -->|CONTRADICTION| H[🛑 Blocked]
     G -->|OUT OF CORPUS| I[⚪ Abstain / Refuse]
     G -->|SUPPORTED| J[🟢 Return Validated Answer]
@@ -112,10 +112,10 @@ graph TD
 
 ### Backend & Verification Engine
 - **FastAPI & Python**
-- **FAISS Vector Search**
-- **SentenceTransformers (BGE-Large Embeddings)**
+- **Custom Hybrid Search (SentenceTransformers Dense + BM25 Sparse)**
+- **Cross-Encoder Reranking**
+- **DeBERTa-v3 (Cross-Encoder NLI Verification Layer)**
 - **PyTorch (CPU-Optimized)**
-- **Cross-Encoder Reranking (NLI Verification Layer)**
 
 ### Frontend
 - **React & Vite**
