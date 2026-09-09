@@ -9,7 +9,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
 
-MODEL_NAME = os.getenv("GENERATOR_MODEL", "llama-3.3-70b-versatile")
+MODEL_NAME = os.getenv("GENERATOR_MODEL", "openai/gpt-oss-120b")
 
 def _build_context(retrieved_docs):
     parts = []

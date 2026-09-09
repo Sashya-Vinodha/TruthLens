@@ -68,6 +68,9 @@ The React-based audit interface provides:
 - Human-in-the-loop verification support
 
 ## 🧩 Architecture Flow
+
+## 🧩 Architecture Flow
+
 ```mermaid
 graph TD
     A[User Query] --> B(Hybrid Retriever: Dense + Sparse BM25)
@@ -83,7 +86,6 @@ graph TD
     I --> K
     J --> K
 ```
-
 ---
 
 ## 📸 System Demonstration
@@ -123,7 +125,7 @@ graph TD
 
 ### LLM Layer
 - **Groq API**
-- **Meta Llama 3 (llama-3.3-70b-versatile)**
+- **OpenAI GPT-OSS 120B (openai/gpt-oss-120b)**
 - **Retrieval-Augmented Generation (RAG)**
 
 ---
