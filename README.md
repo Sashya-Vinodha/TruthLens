@@ -125,7 +125,7 @@ graph TD
 
 ### LLM Layer
 - **Groq API**
-- **Meta Llama 3 (llama-3.3-70b-versatile)**
+- **OpenAI GPT-OSS 120B (openai/gpt-oss-120b)**
 - **Retrieval-Augmented Generation (RAG)**
 
 ---
